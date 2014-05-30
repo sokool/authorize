@@ -18,8 +18,8 @@
     },
     "autoload": {
         "psr-0": {
-            "MintSoft/Authorize\\": "src/",
-            "MintSoft/Authorize/Test\\": "tests/"
+            "MintSoft\Authorize\\": "src/",
+            "MintSoft\Authorize\Test\\": "tests/"
 
         }
     }

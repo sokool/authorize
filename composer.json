@@ -1,25 +1,25 @@
 {
-    "name": "mint-soft/form-bakery",
-    "description": "Zend Framework 2 Module that extends Doctrine module",
+    "name": "mint-soft/authorize",
+    "description": "Zend Framework 2 Module for RBAC",
     "type": "library",
     "license": "MIT",
     "keywords": [
-        "doctrine",
-        "orm",
-        "module",
-        "zf2"
+        "rbac",
+        "acl",
+        "authorize",
+        "annotations"
     ],
-    "homepage": "https://github.com/sokool/form-bakery",
+    "homepage": "https://github.com/sokool/authorize",
     "require": {
         "php": ">=5.3.3",
         "zendframework/zend-modulemanager": "2.3.*",
-        "zendframework/zend-mvc" : "2.3.*",
-        "zendframework/zend-cache" : "2.3.*"
+        "zendframework/zend-mvc": "2.3.*",
+        "zendframework/zend-cache": "2.3.*"
     },
     "autoload": {
         "psr-0": {
-            "MintSoftFormBakery\\": "src/",
-            "MintSoftFormBakeryTest\\": "tests/"
+            "MintSoft/Authorize\\": "src/",
+            "MintSoft/Authorize/Test\\": "tests/"
         }
     }
 }

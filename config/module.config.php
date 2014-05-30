@@ -18,7 +18,7 @@ return [
     ],
     'view_manager' => [
         'template_map' => [
-            'error/403' => __DIR__ . '/../view/error/403.phtml',
+            'error/403' => __DIR__ . '/../src/MintSoft/Authorize/view/error/403.phtml',
         ]
     ],
 ];

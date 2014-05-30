@@ -6,7 +6,7 @@
  * Time: 13:59
  */
 
-namespace Authorize\Provider\Permission;
+namespace MintSoft\Authorize\Provider\Permission;
 
 interface PermissionProviderInterface
 {

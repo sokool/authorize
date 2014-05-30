@@ -6,7 +6,7 @@
  * Time: 08:35
  */
 
-namespace Authorize\Provider\Identity;
+namespace MintSoft\Authorize\Provider\Identity;
 
 interface IdentityProviderInterface
 {

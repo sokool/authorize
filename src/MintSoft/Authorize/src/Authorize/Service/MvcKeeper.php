@@ -6,10 +6,10 @@
  * Time: 13:20
  */
 
-namespace Authorize\Service;
+namespace MintSoft\Authorize\Service;
 
-use Authorize\Annotation\AnnotationBuilder as AuthorizeBuilder;
-use Authorize\Annotation\Authorize;
+use MintSoft\Authorize\Annotation as AuthorizeBuilder;
+use MintSoft\Authorize\Annotation\Authorize;
 use Zend\Authentication\AuthenticationService;
 use Zend\EventManager\EventManagerInterface;
 use Zend\EventManager\ListenerAggregateInterface;

@@ -6,9 +6,9 @@
  * Time: 10:38
  */
 
-namespace Authorize\Factory;
+namespace MintSoft\Authorize\Factory;
 
-use Authorize\View\AccessForbiddenStrategy;
+use MintSoft\Authorize\View\AccessForbiddenStrategy;
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 

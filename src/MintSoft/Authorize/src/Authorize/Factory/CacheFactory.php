@@ -6,9 +6,9 @@
  * Time: 15:03
  */
 
-namespace Authorize\Factory;
+namespace MintSoft\Authorize\Factory;
 
-use Nette\Diagnostics\Debugger;
+//use Nette\Diagnostics\Debugger;
 use Zend\Cache\Storage\Adapter\Memory as MemoryCache;
 use Zend\Cache\StorageFactory;
 use Zend\ServiceManager\FactoryInterface;
@@ -27,7 +27,7 @@ class CacheFactory implements FactoryInterface
         $cacheOptions = $configuration['authorize']['cache'];
         $cacheAdapter = StorageFactory::factory($cacheOptions);
         if (isset($_GET['clearCache'])) {
-            Debugger::barDump('Cache for ' . __NAMESPACE__ . ' has been cleared');
+//            Debugger::barDump('Cache for ' . __NAMESPACE__ . ' has been cleared');
             $cacheAdapter->clearByNamespace($cacheOptions['adapter']['options']['namespace']);
         }
 

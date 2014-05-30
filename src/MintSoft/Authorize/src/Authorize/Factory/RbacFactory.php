@@ -6,7 +6,7 @@
  * Time: 14:20
  */
 
-namespace Authorize\Factory;
+namespace MintSoft\Authorize\Factory;
 
 use Authorize\Service\RbacService;
 use Zend\ServiceManager\FactoryInterface;
@@ -17,9 +17,9 @@ class RbacFactory implements FactoryInterface
 
     public function createService(ServiceLocatorInterface $serviceLocator)
     {
-        $permissionProvider = $serviceLocator->get('Authorize\Provider\Permission');
-        $roleProvider       = $serviceLocator->get('Authorize\Provider\Role');
-        $cacheService       = $serviceLocator->get('Authorize\Cache');
+        $permissionProvider = $serviceLocator->get('MintSoft\Authorize\Provider\Permission');
+        $roleProvider       = $serviceLocator->get('MintSoft\Authorize\Provider\Role');
+        $cacheService       = $serviceLocator->get('MintSoft\Authorize\Cache');
 
         $rbacService = new RbacService($roleProvider, $permissionProvider);
         $rbacService->setCacheAdapter($cacheService);

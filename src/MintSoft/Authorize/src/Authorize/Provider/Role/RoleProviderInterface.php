@@ -5,7 +5,7 @@
  * Date: 14/05/14
  * Time: 13:56
  */
-namespace Authorize\Provider\Role;
+namespace MintSoft\Authorize\Provider\Role;
 
 interface RoleProviderInterface
 {

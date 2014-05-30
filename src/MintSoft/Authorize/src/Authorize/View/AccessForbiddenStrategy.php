@@ -6,7 +6,7 @@
  * Time: 08:46
  */
 
-namespace Authorize\View;
+namespace MintSoft\Authorize\View;
 
 use Zend\EventManager\EventManagerInterface;
 use Zend\EventManager\ListenerAggregateInterface;

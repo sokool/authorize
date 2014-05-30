@@ -6,9 +6,9 @@
  * Time: 14:44
  */
 
-namespace Authorize\View\Helper;
+namespace MintSoft\Authorize\View\Helper;
 
-use Authorize\Service\RbacService;
+use MintSoft\Authorize\Service\RbacService;
 use Zend\Http\Request as HttpRequest;
 use Zend\ServiceManager\ServiceLocatorAwareInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
@@ -44,7 +44,7 @@ class User extends AbstractHelper implements ServiceLocatorAwareInterface
     public function isInRole($roleName)
     {
         /** @var $rbacService RbacService */
-        $rbacService = $this->getServiceLocator()->get('Authorize\Rbac');
+        $rbacService = $this->getServiceLocator()->get('MintSoft\Authorize\Rbac');
 
         return $rbacService->hasRole($this->identity(), $roleName);
     }
@@ -65,7 +65,7 @@ class User extends AbstractHelper implements ServiceLocatorAwareInterface
     {
         $routerService     = $this->getServiceLocator()->get('Router');
         $controllerManager = $this->getServiceLocator()->get('ControllerManager');
-        $mvcKeeper         = $this->getServiceLocator()->get('Authorize\MvcKeeper');
+        $mvcKeeper         = $this->getServiceLocator()->get('MintSoft\Authorize\MvcKeeper');
         $route             = $routerService->getRoute($routeName);
         if (null == $route) {
             throw new \Exception;

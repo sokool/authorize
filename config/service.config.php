@@ -2,12 +2,12 @@
 
 return [
     'factories' => [
-        'Authorize\Rbac'                         => 'Authorize\Factory\RbacFactory',
-        'Authorize\MvcKeeper'                    => 'Authorize\Factory\MvcKeeperFactory',
-        'Authorize\Cache'                        => 'Authorize\Factory\CacheFactory',
-        'Authorize\Annotation\Builder'           => 'Authorize\Factory\BuilderFactory',
-        'Authorize\Provider\Permission'          => '',
-        'Authorize\Provider\Role'                => '',
-        'Authorize\View\AccessForbiddenStrategy' => 'Authorize\Factory\AccessForbiddenFactory',
+        'MintSoft\Authorize\Rbac'                    => 'MintSoft\Authorize\Factory\RbacFactory',
+        'MintSoft\Authorize\MvcKeeper'               => 'MintSoft\Authorize\Factory\MvcKeeperFactory',
+        'MintSoft\Authorize\Cache'                   => 'MintSoft\Authorize\Factory\CacheFactory',
+        'MintSoft\Authorize\Annotation\Builder'      => 'MintSoft\Authorize\Factory\BuilderFactory',
+        'MintSoft\Authorize\Provider\Permission'     => '',
+        'MintSoft\Authorize\Provider\Role'           => '',
+        'MintSoft\Authorize\AccessForbiddenStrategy' => 'MintSoft\Authorize\Factory\AccessForbiddenFactory',
     ],
 ];

@@ -25,23 +25,23 @@ class Module implements
         $eventManager   = $e->getTarget()->getEventManager();
         $serviceManager = $e->getTarget()->getServiceManager();
 
-        $eventManager->attach($serviceManager->get('Authorize\MvcKeeper'));
-        $eventManager->attach($serviceManager->get('Authorize\View\AccessForbiddenStrategy'));
+        $eventManager->attach($serviceManager->get('MintSoft\Authorize\MvcKeeper'));
+        $eventManager->attach($serviceManager->get('MintSoft\Authorize\AccessForbiddenStrategy'));
     }
 
     public function getConfig()
     {
-        return include __DIR__ . '/config/module.config.php';
+        return include __DIR__ . '/../../../config/module.config.php';
     }
 
     public function getServiceConfig()
     {
-        return include __DIR__ . '/config/service.config.php';
+        return include __DIR__ . '/../../../config/service.config.php';
     }
 
     public function getViewHelperConfig()
     {
-        return include __DIR__ . '/config/view_helper.config.php';
+        return include __DIR__ . '/../../../config/view_helper.config.php';
     }
 
     public function getAutoloaderConfig()

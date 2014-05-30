@@ -6,9 +6,9 @@
  * Time: 09:42
  */
 
-namespace Authorize\Factory;
+namespace MintSoft\Authorize\Factory;
 
-use Authorize\Annotation\AnnotationBuilder;
+use MintSoft\Authorize\Annotation\AnnotationBuilder;
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
@@ -16,7 +16,7 @@ class BuilderFactory implements FactoryInterface
 {
     public function createService(ServiceLocatorInterface $serviceLocator)
     {
-        $cache             = $serviceLocator->get('Authorize\Cache');
+        $cache             = $serviceLocator->get('MintSoft\Authorize\Cache');
         $controllerManager = $serviceLocator->get('ControllerManager');
 
         $annotationBuilder = new AnnotationBuilder($controllerManager);

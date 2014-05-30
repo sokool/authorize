@@ -6,10 +6,10 @@
  * Time: 14:16
  */
 
-namespace Authorize\Service;
+namespace MintSoft\Authorize\Service;
 
-use Authorize\Provider\Permission\PermissionProviderInterface;
-use Authorize\Provider\Role\RoleProviderInterface;
+use MintSoft\Authorize\Provider\Permission\PermissionProviderInterface;
+use MintSoft\Authorize\Provider\Role\RoleProviderInterface;
 use Zend\Cache\Storage\Adapter\AbstractAdapter as CacheAdapter;
 use Zend\Permissions\Rbac\Rbac as ZendRbac;
 use Zend\Permissions\Rbac\Role;
@@ -45,7 +45,7 @@ class RbacService
     }
 
     /**
-     * @return \Authorize\Provider\Permission\PermissionProviderInterface
+     * @return PermissionProviderInterface
      */
     public function getPermissionProvider()
     {
@@ -53,7 +53,7 @@ class RbacService
     }
 
     /**
-     * @return \Authorize\Provider\Role\RoleProviderInterface
+     * @return RoleProviderInterface
      */
     public function getRoleProvider()
     {

@@ -6,7 +6,7 @@
  * Time: 13:18
  */
 
-namespace Authorize\Annotation;
+namespace MintSoft\Authorize\Annotation;
 
 use Zend\Form\Annotation\AbstractArrayOrStringAnnotation;
 

@@ -8,7 +8,7 @@
 
 namespace MintSoft\Authorize\Service;
 
-use MintSoft\Authorize\Annotation as AuthorizeBuilder;
+use MintSoft\Authorize\Annotation\AnnotationBuilder as AuthorizeBuilder;
 use MintSoft\Authorize\Annotation\Authorize;
 use Zend\Authentication\AuthenticationService;
 use Zend\EventManager\EventManagerInterface;

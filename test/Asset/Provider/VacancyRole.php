@@ -8,11 +8,11 @@
 
 namespace AuthorizeTest\Asset\Provider;
 
-use MintSoft\Authorize\Provider\Role\RoleProviderInterface;
+use Authorize\Provider\Role\RoleProviderInterface;
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
-class Role implements RoleProviderInterface, FactoryInterface
+class VacancyRole extends Role
 {
     public function createService(ServiceLocatorInterface $serviceLocator)
     {
@@ -21,13 +21,13 @@ class Role implements RoleProviderInterface, FactoryInterface
 
     public function getAll()
     {
-        return ['Upload', 'Download', 'Grant'];
+        return ['Vacancy Fill'];
     }
 
     public function getByUser($user)
     {
         $userRoles = [
-            'some-user@some-domain.here' => ['Upload', 'Download', 'Some amazing role']
+            'some-user@some-domain.here' => ['Vacancy Fill'],
         ];
 
         return array_key_exists($user, $userRoles) ? $userRoles[$user] : [];

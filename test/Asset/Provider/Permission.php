@@ -8,7 +8,7 @@
 
 namespace AuthorizeTest\Asset\Provider;
 
-use Authorize\Provider\Permission\PermissionProviderInterface;
+use MintSoft\Authorize\Provider\Permission\PermissionProviderInterface;
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 

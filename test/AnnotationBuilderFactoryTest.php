@@ -20,6 +20,20 @@ class AnnotationBuilderFactoryTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
+        Bootstrap::getServiceManager()
+            ->setAllowOverride(true)
+            ->setFactory('Configuration', function () {
+                return [
+                    'authorize' => [
+                        'cache' => [
+                            'adapter' => [
+                                'name' => 'memory',
+                            ],
+                        ],
+                    ],
+                ];
+            });
+
         $this->factory = new BuilderFactory();
     }
 

@@ -8,32 +8,37 @@
 
 namespace AuthorizeTest;
 
-use Authorize\Annotation\AnnotationBuilder;
-use Authorize\Factory\BuilderFactory;
-use FloTest\Bootstrap;
+use MintSoft\Authorize\Annotation\AnnotationBuilder;
+use MintSoft\Authorize\Factory\BuilderFactory;
+use AuthorizeTest\Asset\Controller\TestController;
+//use FloTest\Bootstrap;
 use Zend\Cache\Storage\Adapter\Memory;
+use Zend\Code\Annotation\AnnotationCollection;
 use Zend\Code\Annotation\AnnotationManager;
+use Zend\Mvc\Controller\ControllerManager;
 
 class AnnotationBuilderServiceTest extends \PHPUnit_Framework_TestCase
 {
+
+    const ANNOTATION_A_CLASS = 'AuthorizeTest\Asset\Controller\TestController';
 
     /**
      * @return AnnotationBuilder
      */
     public function createBuilder()
     {
-        Bootstrap::getServiceManager()
-            ->get('ControllerManager')
-            ->setAllowOverride(true)
-            ->setInvokableClass('AuthorizeTest\Controller\Test', 'AuthorizeTest\Controller\TestController');
+        $controllerManager = (new ControllerManager())
+            ->setInvokableClass('AuthorizeTest\Asset\Controller\Test', self::ANNOTATION_A_CLASS)
+            ->setInvokableClass('AuthorizeTest\Asset\Controller\TestB', '\AuthorizeTest\Asset\Controller\TestBController')
+            ->setServiceLocator(Bootstrap::getServiceManager());
 
-        return (new BuilderFactory())->createService(Bootstrap::getServiceManager());
+        return (new AnnotationBuilder($controllerManager))
+            ->setCacheAdapter(new Memory());
     }
 
     public function testDefaultInstances()
     {
-        $service = new AnnotationBuilder(Bootstrap::getServiceManager()->get('ControllerManager'));
-
+        $service = $this->createBuilder();
         // Check default agregated objects
         $this->assertInstanceOf('Zend\Code\Annotation\AnnotationManager', $service->getAnnotationManager());
         $this->assertInstanceOf('Zend\Cache\Storage\Adapter\Memory', $service->getCacheAdapter());
@@ -41,7 +46,7 @@ class AnnotationBuilderServiceTest extends \PHPUnit_Framework_TestCase
 
     public function testSetUpInstances()
     {
-        $service = new AnnotationBuilder(Bootstrap::getServiceManager()->get('ControllerManager'));
+        $service = $this->createBuilder();
 
         $service->setCacheAdapter($memoryCache = new Memory());
         $service->setAnnotationManager($annotationManager = new AnnotationManager());
@@ -50,10 +55,36 @@ class AnnotationBuilderServiceTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($memoryCache, $service->getCacheAdapter());
     }
 
-    public function testAuthorizeConfigCache()
-    {
-        $service      = $this->createBuilder();
-        $builderCache = $service->getCacheAdapter();
+	/**
+	 * Testing:
+	 * getAuthorizeConfig()
+	 * getCacheAdapter()
+	 * MemoryCache::getItem()
+	 *
+	 * Setting some testing array to cache and check if method properly load same array from cache
+	 */
+	public function testAuthorizeConfigCacheEmpty()
+	{
+		$service      = $this->createBuilder();
+		$builderCache = $service->getCacheAdapter();
+		$testingConf  = [
+			'someConf' => true
+		];
+
+		$builderCache->setItem(AnnotationBuilder::CACHE, serialize($testingConf));
+
+		$service->getAuthorizeConfig();
+
+		$this->assertEquals($testingConf, unserialize($builderCache->getItem(AnnotationBuilder::CACHE)));
+
+		// clear settings
+		$builderCache->setItem(AnnotationBuilder::CACHE, null);
+	}
+
+	public function testAuthorizeConfigCache()
+	{
+		$service      = $this->createBuilder();
+		$builderCache = $service->getCacheAdapter();
 
         $this->assertNull($builderCache->getItem(AnnotationBuilder::CACHE));
 
@@ -61,4 +92,54 @@ class AnnotationBuilderServiceTest extends \PHPUnit_Framework_TestCase
 
         $this->assertTrue(is_string($builderCache->getItem(AnnotationBuilder::CACHE)));
     }
-} 
+
+    public function testAuthorizeConfigStructure()
+    {
+        $authorizeConfig = $this->createBuilder()->getAuthorizeConfig();
+
+        //Class name (FQDN) is key name of authorize config.
+        $this->assertTrue(array_key_exists(self::ANNOTATION_A_CLASS, $authorizeConfig));
+        //has methods array key
+        $this->assertTrue(array_key_exists('methods', $authorizeConfig[self::ANNOTATION_A_CLASS]));
+        //methods key is array
+        $this->assertTrue(is_array($authorizeConfig[self::ANNOTATION_A_CLASS]['methods']));
+        //has class array key
+        $this->assertTrue(array_key_exists('class', $authorizeConfig[self::ANNOTATION_A_CLASS]));
+        //class key has Authorize annotation
+        $this->assertInstanceOf('MintSoft\Authorize\Annotation\Authorize', $authorizeConfig[self::ANNOTATION_A_CLASS]['class']);
+        //has asset method array key
+        $this->assertTrue(array_key_exists('someSpecificCustomAction', $authorizeConfig[self::ANNOTATION_A_CLASS]['methods']));
+        //method has Authorize annotation
+        $this->assertInstanceOf('MintSoft\Authorize\Annotation\Authorize', $authorizeConfig[self::ANNOTATION_A_CLASS]['methods']['someSpecificCustomAction']);
+    }
+
+    /**
+     * @expectedException \Zend\Di\Exception\ClassNotFoundException
+     */
+    public function testBuildBasedOnStringException()
+    {
+        $this->createBuilder()->buildAnnotations('SomeClassFQDN');
+    }
+
+	/**
+	 * Testing:
+	 * testGetAuthorize()
+	 *
+	 * Main method's logic should found that wrong param was given and return null
+	 */
+	public function testGetAuthorizeInvalidParam()
+	{
+		$service = $this->createBuilder();
+
+		$annotationCollection = new AnnotationCollection;
+		$annotationCollection->append('nonAuthorize');
+
+		$class  = new \ReflectionClass('MintSoft\\Authorize\\Annotation\\AnnotationBuilder');
+		$method = $class->getMethod('getAuthorize');
+		$method->setAccessible(true);
+
+		$result = $method->invoke($service, $annotationCollection);
+
+		$this->assertNull($result);
+	}
+}

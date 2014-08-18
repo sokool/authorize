@@ -11,6 +11,7 @@ namespace MintSoft\Authorize\Service;
 use MintSoft\Authorize\Provider\Permission\PermissionProviderInterface;
 use MintSoft\Authorize\Provider\Role\RoleProviderInterface;
 use Zend\Cache\Storage\Adapter\AbstractAdapter as CacheAdapter;
+use Zend\Cache\Storage\Adapter\Memory as MemoryCache;
 use Zend\Permissions\Rbac\Rbac as ZendRbac;
 use Zend\Permissions\Rbac\Role;
 
@@ -68,7 +69,6 @@ class RbacService
      */
     public function hasRole($user, $role)
     {
-        // @todo Cache it?
         if (!$this->getContainer()->hasRole($role)) {
             return false;
         }
@@ -148,6 +148,10 @@ class RbacService
      */
     public function getCacheAdapter()
     {
+        if (!$this->cacheAdapter) {
+            return $this->cacheAdapter = new MemoryCache();
+        }
+
         return $this->cacheAdapter;
     }
 }

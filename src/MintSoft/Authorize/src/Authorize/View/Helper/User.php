@@ -8,24 +8,78 @@
 
 namespace MintSoft\Authorize\View\Helper;
 
-use MintSoft\Authorize\Service\RbacService;
+use MintSoft\Authorize\Service\MvcKeeper;
 use Zend\Http\Request as HttpRequest;
-use Zend\ServiceManager\ServiceLocatorAwareInterface;
-use Zend\ServiceManager\ServiceLocatorInterface;
+use Zend\Mvc\Controller\ControllerManager;
+use Zend\Mvc\Router\SimpleRouteStack;
 use Zend\View\Helper\AbstractHelper;
 
-class User extends AbstractHelper implements ServiceLocatorAwareInterface
+/**
+ * Class User
+ *
+ * @todo    refactor this class, Services need to be injected into that class, not called from ServiceLocator
+ * @package Authorize\View\Helper
+ */
+class User extends AbstractHelper
 {
-    protected $serviceManager;
+    /**
+     * @var MvcKeeper
+     */
+    protected $mvcKeeper;
 
-    public function setServiceLocator(ServiceLocatorInterface $serviceLocator)
+    /**
+     * @var ControllerManager
+     */
+    protected $controllerManager;
+
+    /**
+     * @var SimpleRouteStack
+     */
+    protected $routeStack;
+
+    public function setMvcKeeper(MvcKeeper $mvcKeeper)
     {
-        $this->serviceManager = $serviceLocator->getServiceLocator();
+        $this->mvcKeeper = $mvcKeeper;
     }
 
-    public function getServiceLocator()
+    /**
+     * @return MvcKeeper
+     */
+    public function getMvcKeeper()
     {
-        return $this->serviceManager;
+        return $this->mvcKeeper;
+    }
+
+    /**
+     * @param \Zend\Mvc\Controller\ControllerManager $controllerManager
+     */
+    public function setControllerManager($controllerManager)
+    {
+        $this->controllerManager = $controllerManager;
+    }
+
+    /**
+     * @return \Zend\Mvc\Controller\ControllerManager
+     */
+    public function getControllerManager()
+    {
+        return $this->controllerManager;
+    }
+
+    /**
+     * @param \Zend\Mvc\Router\SimpleRouteStack $routeStack
+     */
+    public function setRouteStack($routeStack)
+    {
+        $this->routeStack = $routeStack;
+    }
+
+    /**
+     * @return \Zend\Mvc\Router\SimpleRouteStack
+     */
+    public function getRouteStack()
+    {
+        return $this->routeStack;
     }
 
     /**
@@ -33,7 +87,7 @@ class User extends AbstractHelper implements ServiceLocatorAwareInterface
      */
     public function identity()
     {
-        return $this->getView()->identity();
+        return $this->mvcKeeper->getAuthenticationService()->getIdentity();
     }
 
     /**
@@ -43,15 +97,25 @@ class User extends AbstractHelper implements ServiceLocatorAwareInterface
      */
     public function isInRole($roleName)
     {
-        /** @var $rbacService RbacService */
-        $rbacService = $this->getServiceLocator()->get('MintSoft\Authorize\Rbac');
+        $identity    = $this->identity();
+        $rbacService = $this->mvcKeeper->getRbac();
 
-        return $rbacService->hasRole($this->identity(), $roleName);
+        return $rbacService->hasRole($identity, $roleName);
     }
 
+    /**
+     * Check if logged user has access to selected resource
+     *
+     * @param  string $permission Resource
+     *
+     * @return bool Has permission?
+     */
     public function hasPermission($permission)
     {
-        throw new \Exception('Not implemented yet!');
+        $identity    = $this->identity();
+        $rbacService = $this->mvcKeeper->getRbac();
+
+        return $rbacService->hasPermission($identity, $permission);
     }
 
     /**
@@ -60,13 +124,16 @@ class User extends AbstractHelper implements ServiceLocatorAwareInterface
      * @param $routeName Route name to module, controller, action.
      *
      * @throws \Exception
+     *
+     * @return bool
      */
     public function hasAccess($routeName)
     {
-        $routerService     = $this->getServiceLocator()->get('Router');
-        $controllerManager = $this->getServiceLocator()->get('ControllerManager');
-        $mvcKeeper         = $this->getServiceLocator()->get('MintSoft\Authorize\MvcKeeper');
+        $routerService     = $this->getRouteStack();
+        $controllerManager = $this->getControllerManager();
+        $mvcKeeper         = $this->getMvcKeeper();
         $route             = $routerService->getRoute($routeName);
+
         if (null == $route) {
             throw new \Exception;
         }

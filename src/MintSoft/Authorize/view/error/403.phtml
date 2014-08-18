@@ -1,1 +1,13 @@
 <h1>Access Forbidden</h1>
+<p>
+    <?php
+    switch (@$error) {
+        case 'error-unauthorized-route':
+            printf('You are not authorized to access route "%s".', $route);
+            break;
+        case 'error-unauthorized':
+            printf('Unauthorized attempt to access a protected resource.');
+            break;
+    }
+    ?>
+</p>

@@ -26,10 +26,6 @@ class CacheFactory implements FactoryInterface
 
         $cacheOptions = $configuration['authorize']['cache'];
         $cacheAdapter = StorageFactory::factory($cacheOptions);
-        if (isset($_GET['clearCache'])) {
-//            Debugger::barDump('Cache for ' . __NAMESPACE__ . ' has been cleared');
-            $cacheAdapter->clearByNamespace($cacheOptions['adapter']['options']['namespace']);
-        }
 
         return $cacheAdapter;
     }

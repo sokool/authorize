@@ -14,6 +14,7 @@ use Zend\Code\Annotation\AnnotationCollection;
 use Zend\Code\Annotation\AnnotationManager;
 use Zend\Code\Annotation\Parser\DoctrineAnnotationParser;
 use Zend\Code\Reflection\ClassReflection;
+use Zend\Di\Exception\ClassNotFoundException;
 use Zend\Mvc\Controller\ControllerManager;
 
 class AnnotationBuilder
@@ -30,6 +31,11 @@ class AnnotationBuilder
         'Authorize\Annotation\Authorize',
     ];
 
+    /**
+     * @todo this class should not depend on ControllerManager!
+     *
+     * @param ControllerManager $controllerManager
+     */
     public function __construct(ControllerManager $controllerManager)
     {
         $this->controllerManager = $controllerManager;
@@ -119,12 +125,12 @@ class AnnotationBuilder
      * @param object|string
      *
      * @return array of Authorize annotations.
-     * @throws \DomainException
+     * @throws \Zend\Di\Exception\ClassNotFoundException
      */
-    protected function buildAnnotations($class)
+    public function buildAnnotations($class)
     {
         if (!is_object($class) && !class_exists($class)) {
-            throw new  \DomainException('Can not get annotations from class which not exists');
+            throw new ClassNotFoundException('Can not get annotations from class which not exists');
         }
 
         $configuration = [];
@@ -139,7 +145,11 @@ class AnnotationBuilder
         }
 
         foreach ($reflection->getMethods() as $method) {
-            $authorizeAnnotation = $this->getAuthorize($method->getAnnotations($manager));
+            $methodAnnotations = $method->getAnnotations($manager);
+            if (!$methodAnnotations) {
+                break;
+            }
+            $authorizeAnnotation = $this->getAuthorize($methodAnnotations);
             if ($authorizeAnnotation) {
                 $configuration['methods'][$method->getName()] = $authorizeAnnotation;
             }

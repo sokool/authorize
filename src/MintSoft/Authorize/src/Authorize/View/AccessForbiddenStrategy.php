@@ -27,11 +27,11 @@ class AccessForbiddenStrategy implements ListenerAggregateInterface
 
     public function onHttpForbidden(MvcEvent $mvcEvent)
     {
-        $errorTemplateName = 'error/403';
-        $httpResponse      = $mvcEvent->getResponse();
-        if (!$httpResponse instanceof HttpResponse || $httpResponse->getStatusCode() !== 403) {
+        if (!$this->isAccessForbidden($mvcEvent->getResponse())) {
             return;
         }
+
+        $errorTemplateName = 'error/403';
 
         //Tell MVC event about errors and push AccessForbidden model to render.
         $mvcEvent
@@ -39,5 +39,14 @@ class AccessForbiddenStrategy implements ListenerAggregateInterface
             ->setViewModel(
                 (new ViewModel())
                     ->setTemplate($errorTemplateName));
+    }
+
+    protected function isAccessForbidden(HttpResponse $httpResponse)
+    {
+        if (!$httpResponse instanceof HttpResponse || $httpResponse->getStatusCode() !== HttpResponse::STATUS_CODE_403) {
+            return false;
+        }
+
+        return true;
     }
 }

@@ -56,6 +56,22 @@ class MvcKeeper implements ListenerAggregateInterface
     }
 
     /**
+     * @return AuthorizeBuilder
+     */
+    public function getAuthorizeBuilder()
+    {
+        return $this->authorizeBuilder;
+    }
+
+    /**
+     * @return \Zend\Authentication\AuthenticationService
+     */
+    public function getAuthenticationService()
+    {
+        return $this->authenticationService;
+    }
+
+    /**
      * Gives currently logged user.
      *
      * @return mixed|null

@@ -8,9 +8,9 @@
 
 namespace MintSoft\Authorize\Factory;
 
+use MintSoft\Authorize\View\Helper\User as UserHelper;
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
-use Authorize\View\Helper\User as UserHelper;
 
 class UserFactory implements FactoryInterface
 {

@@ -9,7 +9,6 @@
 namespace AuthorizeTest;
 
 use AuthorizeTest\Asset\Provider;
-use FloTest\Bootstrap;
 
 class RoleProviderTest extends \PHPUnit_Framework_TestCase
 {

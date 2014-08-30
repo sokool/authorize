@@ -8,8 +8,8 @@
 
 namespace AuthorizeTest;
 
-use Authorize\Factory\CacheFactory;
 use FloTest\Bootstrap;
+use MintSoft\Authorize\Factory\CacheFactory;
 
 class CacheFactoryTest extends \PHPUnit_Framework_TestCase
 {

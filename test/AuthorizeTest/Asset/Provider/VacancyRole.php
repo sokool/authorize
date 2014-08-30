@@ -8,8 +8,6 @@
 
 namespace AuthorizeTest\Asset\Provider;
 
-use Authorize\Provider\Role\RoleProviderInterface;
-use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
 class VacancyRole extends Role

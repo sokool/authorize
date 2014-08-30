@@ -8,8 +8,8 @@
 
 namespace AuthorizeTest;
 
-use Authorize\Factory\AccessForbiddenFactory;
 use FloTest\Bootstrap;
+use MintSoft\Authorize\Factory\AccessForbiddenFactory;
 
 class AccessForbiddenFactoryTest extends \PHPUnit_Framework_TestCase
 {

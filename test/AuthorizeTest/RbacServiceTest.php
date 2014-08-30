@@ -8,9 +8,9 @@
 
 namespace AuthorizeTest;
 
-use MintSoft\Authorize\Service\RbacService;
 use AuthorizeTest\Asset\Provider\Permission as PermissionProvider;
 use AuthorizeTest\Asset\Provider\Role as RoleProvider;
+use MintSoft\Authorize\Service\RbacService;
 
 class RbacServiceTest extends \PHPUnit_Framework_TestCase
 {

@@ -18,6 +18,7 @@
         "zendframework/zend-form": ">= 2.3",
         "zendframework/zend-code": ">= 2.3",
         "zendframework/zend-view": ">= 2.3",
+        "zendframework/zend-test": ">= 2.3",
         "zendframework/zend-authentication": ">= 2.3",
         "zendframework/zend-permissions-rbac": ">= 2.3",
         "zendframework/zend-cache": ">= 2.3"

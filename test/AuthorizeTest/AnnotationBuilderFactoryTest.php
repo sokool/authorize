@@ -8,8 +8,8 @@
 
 namespace AuthorizeTest;
 
-use Authorize\Factory\BuilderFactory;
 use FloTest\Bootstrap;
+use MintSoft\Authorize\Factory\BuilderFactory;
 
 class AnnotationBuilderFactoryTest extends \PHPUnit_Framework_TestCase
 {

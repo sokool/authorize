@@ -3,31 +3,31 @@
  * Created by PhpStorm.
  * User: sokool
  * Date: 03/06/14
- * Time: 14:25
+ * Time: 14:36
  */
 
 namespace AuthorizeTest;
 
-use Authorize\Factory\RbacFactory;
 use FloTest\Bootstrap;
+use MintSoft\Authorize\Factory\MvcKeeperFactory;
 
-class RbacFactoryTest extends \PHPUnit_Framework_TestCase
+class MvcKeeperFactoryTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var RbacFactory
+     * @var MvcKeeperFactory
      */
     protected $factory;
 
     public function setUp()
     {
-        $this->factory = new RbacFactory();
+        $this->factory = new MvcKeeperFactory();
     }
 
     public function testInstanceReturned()
     {
         $this->assertInstanceOf(
-            'Authorize\Service\RbacService',
+            'Authorize\Service\MvcKeeper',
             $this->factory->createService(Bootstrap::getServiceManager())
         );
     }
-}
+} 

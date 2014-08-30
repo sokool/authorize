@@ -8,23 +8,23 @@
 
 namespace AuthorizeTest;
 
+use AuthorizeTest\Asset\Authentication\FakeAdapter;
+use AuthorizeTest\Asset\Provider\Permission as PermissionProvider;
+use AuthorizeTest\Asset\Provider\Role as RoleProvider;
 use MintSoft\Authorize\Annotation\AnnotationBuilder;
 use MintSoft\Authorize\Annotation\Authorize;
 use MintSoft\Authorize\Service\MvcKeeper;
 use MintSoft\Authorize\Service\RbacService;
-use AuthorizeTest\Asset\Authentication\FakeAdapter;
-use AuthorizeTest\Asset\Controller\TestController;
-use AuthorizeTest\Asset\Provider\Permission as PermissionProvider;
-use AuthorizeTest\Asset\Provider\Role as RoleProvider;
-//use FloTest\Bootstrap;
 use Zend\Authentication\AuthenticationService;
 use Zend\Authentication\Storage\NonPersistent;
 use Zend\EventManager\EventManager;
+use Zend\Http\Response;
 use Zend\Mvc\Application;
 use Zend\Mvc\Controller\ControllerManager;
 use Zend\Mvc\MvcEvent;
 use Zend\Mvc\Router\RouteMatch;
-use Zend\Http\Response;
+
+//use FloTest\Bootstrap;
 
 class MvcKeeperServiceTest extends \PHPUnit_Framework_TestCase
 {

@@ -8,15 +8,15 @@
 
 namespace AuthorizeTest\View\Helper;
 
+use AuthorizeTest\AnnotationBuilderServiceTest;
+use AuthorizeTest\Asset\Authentication\FakeAdapter;
+use AuthorizeTest\Asset\Provider\Permission;
+use AuthorizeTest\Asset\Provider\Role;
 use MintSoft\Authorize\Annotation\AnnotationBuilder;
 use MintSoft\Authorize\Factory\UserFactory;
 use MintSoft\Authorize\Service\MvcKeeper;
 use MintSoft\Authorize\Service\RbacService;
 use MintSoft\Authorize\View\Helper\User as UserHelper;
-use AuthorizeTest\AnnotationBuilderServiceTest;
-use AuthorizeTest\Asset\Authentication\FakeAdapter;
-use AuthorizeTest\Asset\Provider\Permission;
-use AuthorizeTest\Asset\Provider\Role;
 use Zend\Authentication\AuthenticationService;
 use Zend\Authentication\Storage\NonPersistent;
 use Zend\Mvc\Controller\ControllerManager;

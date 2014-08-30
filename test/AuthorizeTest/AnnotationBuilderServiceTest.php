@@ -9,13 +9,12 @@
 namespace AuthorizeTest;
 
 use MintSoft\Authorize\Annotation\AnnotationBuilder;
-use MintSoft\Authorize\Factory\BuilderFactory;
-use AuthorizeTest\Asset\Controller\TestController;
-//use FloTest\Bootstrap;
 use Zend\Cache\Storage\Adapter\Memory;
 use Zend\Code\Annotation\AnnotationCollection;
 use Zend\Code\Annotation\AnnotationManager;
 use Zend\Mvc\Controller\ControllerManager;
+
+//use FloTest\Bootstrap;
 
 class AnnotationBuilderServiceTest extends \PHPUnit_Framework_TestCase
 {

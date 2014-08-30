@@ -9,7 +9,6 @@
 namespace AuthorizeTest\Asset\Controller;
 
 use Zend\Mvc\Controller\AbstractActionController;
-use Authorize\Annotation\Authorize;
 
 /**
  * @Authorize()

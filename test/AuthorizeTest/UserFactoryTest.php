@@ -8,8 +8,8 @@
 
 namespace AuthorizeTest;
 
-use Authorize\Factory\UserFactory;
 use FloTest\Bootstrap;
+use MintSoft\Authorize\Factory\UserFactory;
 
 /**
  * UserFactory tests

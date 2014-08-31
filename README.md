@@ -1,3 +1,1 @@
-Foreword
-=========
-Flo is based on identifiers, roles and permissions, it means that some FLO user has list of defined roles in the system. Those role are dynamic, it means that two different user might have completely different set of roles in different time. That kind of structure determine what particular user can do with applications. Scenario described above, it' commonly know as RBAC (role based access control). In old FLO application we were using ACL, the main difference between them is that RBAC is more focused on USER ROLES and their PERMISSIONS, ACL is focused on RESOURCE and PERMISSIONS. Basically, new implementation is based on build in RBAC from ZF2 - please read it carefully, at least introduction where all general scope is well described.
+# Authorize Module for Zendd Framework 2#

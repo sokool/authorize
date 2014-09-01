@@ -9,7 +9,7 @@ If you answered YES, then this module is for you, This, what you looking is comm
 **MintSoft Authorize** module is based on **RBAC** approach, which restricting system access to authorized users. This module will let you easy manage
 access to your system resources based on logged user **ROLES** and/or **PERMISSIONS** .
 
-## Project Status
+## Status
 
 [![Master Branch Build Status](https://travis-ci.org/sokool/authorize.svg?branch=master)](https://travis-ci.org/sokool/authorize)
 

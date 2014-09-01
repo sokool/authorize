@@ -1,4 +1,3 @@
-authorize
-=========
+# Authorize Module for Zendd Framework 2
 
-authorize
+Mint-Software Authorize module is based on RBAC implementation

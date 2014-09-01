@@ -36,7 +36,7 @@ class UserTest extends \PHPUnit_Framework_TestCase
     {
         $controllerManager     = (new ControllerManager())
             ->setInvokableClass('Test', AnnotationBuilderServiceTest::ANNOTATION_A_CLASS)
-            ->setServiceLocator(Bootstrap::getServiceManager());
+            ->setServiceLocator(\Bootstrap::getServiceManager());
 		$testRoute             = new Literal('/some/test/route', [
 			'controller' => 'Test',
 			'action'     => 'forUploadAndDownload'

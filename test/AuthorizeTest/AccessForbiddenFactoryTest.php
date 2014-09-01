@@ -25,8 +25,8 @@ class AccessForbiddenFactoryTest extends \PHPUnit_Framework_TestCase
     public function testInstanceReturned()
     {
         $this->assertInstanceOf(
-            'Authorize\View\AccessForbiddenStrategy',
-            $this->factory->createService(Bootstrap::getServiceManager())
+            'MintSoft\Authorize\View\AccessForbiddenStrategy',
+            $this->factory->createService(\Bootstrap::getServiceManager())
         );
     }
 } 

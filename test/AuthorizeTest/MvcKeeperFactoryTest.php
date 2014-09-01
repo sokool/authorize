@@ -8,8 +8,10 @@
 
 namespace AuthorizeTest;
 
-use FloTest\Bootstrap;
+use AuthorizeTest\Asset\Authentication\FakeAdapter;
 use MintSoft\Authorize\Factory\MvcKeeperFactory;
+use Zend\Authentication\AuthenticationService;
+use Zend\Authentication\Storage\NonPersistent;
 
 class MvcKeeperFactoryTest extends \PHPUnit_Framework_TestCase
 {
@@ -20,14 +22,26 @@ class MvcKeeperFactoryTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
+        \Bootstrap::getServiceManager()
+            ->setAllowOverride(true)
+            ->setFactory('Zend\Authentication\AuthenticationService', function () {
+                FakeAdapter::$userIdentity = 'dood@somewhere.de';
+
+                $authenticationService = new AuthenticationService(new NonPersistent(), new FakeAdapter);
+                $authenticationService->authenticate();
+
+                return $authenticationService;
+            });
+
+
         $this->factory = new MvcKeeperFactory();
     }
 
     public function testInstanceReturned()
     {
         $this->assertInstanceOf(
-            'Authorize\Service\MvcKeeper',
-            $this->factory->createService(Bootstrap::getServiceManager())
+            'MintSoft\Authorize\Service\MvcKeeper',
+            $this->factory->createService(\Bootstrap::getServiceManager())
         );
     }
 } 

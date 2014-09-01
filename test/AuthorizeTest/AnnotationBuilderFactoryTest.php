@@ -8,7 +8,6 @@
 
 namespace AuthorizeTest;
 
-use FloTest\Bootstrap;
 use MintSoft\Authorize\Factory\BuilderFactory;
 
 class AnnotationBuilderFactoryTest extends \PHPUnit_Framework_TestCase
@@ -20,7 +19,7 @@ class AnnotationBuilderFactoryTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        Bootstrap::getServiceManager()
+        \Bootstrap::getServiceManager()
             ->setAllowOverride(true)
             ->setFactory('Configuration', function () {
                 return [
@@ -40,8 +39,8 @@ class AnnotationBuilderFactoryTest extends \PHPUnit_Framework_TestCase
     public function testInstanceReturned()
     {
         $this->assertInstanceOf(
-            'Authorize\Annotation\AnnotationBuilder',
-            $this->factory->createService(Bootstrap::getServiceManager())
+            'MintSoft\Authorize\Annotation\AnnotationBuilder',
+            $this->factory->createService(\Bootstrap::getServiceManager())
         );
     }
 } 

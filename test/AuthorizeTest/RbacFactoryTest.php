@@ -27,7 +27,7 @@ class RbacFactoryTest extends \PHPUnit_Framework_TestCase
     {
         $this->assertInstanceOf(
             'Authorize\Service\RbacService',
-            $this->factory->createService(Bootstrap::getServiceManager())
+            $this->factory->createService(\Bootstrap::getServiceManager())
         );
     }
 }

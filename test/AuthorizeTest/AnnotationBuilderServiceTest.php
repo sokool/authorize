@@ -14,8 +14,6 @@ use Zend\Code\Annotation\AnnotationCollection;
 use Zend\Code\Annotation\AnnotationManager;
 use Zend\Mvc\Controller\ControllerManager;
 
-//use FloTest\Bootstrap;
-
 class AnnotationBuilderServiceTest extends \PHPUnit_Framework_TestCase
 {
 
@@ -29,7 +27,7 @@ class AnnotationBuilderServiceTest extends \PHPUnit_Framework_TestCase
         $controllerManager = (new ControllerManager())
             ->setInvokableClass('AuthorizeTest\Asset\Controller\Test', self::ANNOTATION_A_CLASS)
             ->setInvokableClass('AuthorizeTest\Asset\Controller\TestB', '\AuthorizeTest\Asset\Controller\TestBController')
-            ->setServiceLocator(Bootstrap::getServiceManager());
+            ->setServiceLocator(\Bootstrap::getServiceManager());
 
         return (new AnnotationBuilder($controllerManager))
             ->setCacheAdapter(new Memory());
@@ -113,7 +111,7 @@ class AnnotationBuilderServiceTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Zend\Di\Exception\ClassNotFoundException
+     * @expectedException \InvalidArgumentException
      */
     public function testBuildBasedOnStringException()
     {

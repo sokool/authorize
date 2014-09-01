@@ -35,7 +35,7 @@ class CacheFactoryTest extends \PHPUnit_Framework_TestCase
 			'authorize' => []
 		];
 
-		$mockedSM = $this->getMock(get_class(Bootstrap::getServiceManager()), ['get']);
+		$mockedSM = $this->getMock(get_class(\Bootstrap::getServiceManager()), ['get']);
 		$mockedSM->expects($this->any())
 			->method('get')
 			->will($this->returnValue($configuration));
@@ -50,13 +50,13 @@ class CacheFactoryTest extends \PHPUnit_Framework_TestCase
 	{
 		$this->assertInstanceOf(
 			'Zend\Cache\Storage\Adapter\Memory',
-			$this->factory->createService(Bootstrap::getServiceManager())
+			$this->factory->createService(\Bootstrap::getServiceManager())
 		);
 	}
 
     public function testClearCacheAdapter()
     {
         $_GET['clearCache'] = true;
-        $this->factory->createService(Bootstrap::getServiceManager());
+        $this->factory->createService(\Bootstrap::getServiceManager());
     }
 } 

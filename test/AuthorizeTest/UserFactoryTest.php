@@ -43,7 +43,7 @@ class UserFactoryTest extends \PHPUnit_Framework_TestCase
 	 */
 	public function testCreateService()
 	{
-		$sm     = Bootstrap::getServiceManager();
+		$sm     = \Bootstrap::getServiceManager();
 		$helper = $this->factory->createService($sm->get('ControllerManager'));
 
 		$this->assertInstanceOf('Authorize\View\Helper\User', $helper);

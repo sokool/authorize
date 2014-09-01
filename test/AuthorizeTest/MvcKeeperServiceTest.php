@@ -43,7 +43,7 @@ class MvcKeeperServiceTest extends \PHPUnit_Framework_TestCase
             (new ControllerManager())
                 ->setAllowOverride(true)
                 ->setInvokableClass('can-be-anything', AnnotationBuilderServiceTest::ANNOTATION_A_CLASS)
-                ->setServiceLocator(Bootstrap::getServiceManager())
+                ->setServiceLocator(\Bootstrap::getServiceManager())
         );
 
         //Authentication of fake identity (like login process)
@@ -205,7 +205,7 @@ class MvcKeeperServiceTest extends \PHPUnit_Framework_TestCase
 			->will($this->returnValue(false));
 
 		$event       = new MvcEvent();
-		$application = new Application([], Bootstrap::getServiceManager());
+		$application = new Application([], \Bootstrap::getServiceManager());
 		$routeMatch  = new RouteMatch(['controller' => 'Flo\Controller\Test', 'action' => 'someSpecificCustom']);
 		$response    = new Response();
 		$event->setApplication($application);

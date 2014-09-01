@@ -1,6 +1,6 @@
 {
     "name": "mint-soft/authorize",
-    "description": "Zend Framework 2 Module for Authorized access for system resources",
+    "description": "Zend Framework 2 module for Authorized access to system resources",
     "type": "library",
     "license": "MIT",
     "keywords": [
@@ -31,7 +31,7 @@
     },
     "autoload": {
         "psr-0": {
-            "MintSoft\\Authorize\\": "src/",
+            "MintSoft\\Authorize": "src/",
             "AuthorizeTest": "tests/"
         }
     }

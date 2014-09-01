@@ -14,7 +14,6 @@ use Zend\Code\Annotation\AnnotationCollection;
 use Zend\Code\Annotation\AnnotationManager;
 use Zend\Code\Annotation\Parser\DoctrineAnnotationParser;
 use Zend\Code\Reflection\ClassReflection;
-use Zend\Di\Exception\ClassNotFoundException;
 use Zend\Mvc\Controller\ControllerManager;
 
 class AnnotationBuilder
@@ -125,12 +124,12 @@ class AnnotationBuilder
      * @param object|string
      *
      * @return array of Authorize annotations.
-     * @throws \Zend\Di\Exception\ClassNotFoundException
+     * @throws \InvalidArgumentException
      */
     public function buildAnnotations($class)
     {
         if (!is_object($class) && !class_exists($class)) {
-            throw new ClassNotFoundException('Can not get annotations from class which not exists');
+            throw new \InvalidArgumentException('Can not get annotations from class which not exists');
         }
 
         $configuration = [];

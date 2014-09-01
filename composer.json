@@ -1,17 +1,19 @@
 {
     "name": "mint-soft/authorize",
-    "description": "Zend Framework 2 Module for RBAC",
+    "description": "Zend Framework 2 Module for Authorized access for system resources",
     "type": "library",
     "license": "MIT",
     "keywords": [
         "rbac",
         "acl",
         "authorize",
-        "annotations"
+        "access",
+        "role",
+        "permission"
     ],
     "homepage": "https://github.com/sokool/authorize",
     "require": {
-        "php": ">=5.3.3",
+        "php": ">=5.4",
         "zendframework/zend-modulemanager": ">= 2.3",
         "zendframework/zend-mvc": ">= 2.3",
         "zendframework/zend-http": ">= 2.3",

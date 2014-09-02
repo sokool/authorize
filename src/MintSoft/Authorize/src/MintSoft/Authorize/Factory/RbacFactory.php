@@ -8,7 +8,7 @@
 
 namespace MintSoft\Authorize\Factory;
 
-use Authorize\Service\RbacService;
+use MintSoft\Authorize\Service\RbacService;
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 

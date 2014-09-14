@@ -30,7 +30,7 @@ class RbacService
     protected $roleProvider;
 
     /**
-     * @var \Zend\Permissions\Rbac
+     * @var \Zend\Permissions\Rbac\Rbac
      */
     protected $container;
 

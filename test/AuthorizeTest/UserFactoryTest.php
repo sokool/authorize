@@ -47,7 +47,7 @@ class UserFactoryTest extends \PHPUnit_Framework_TestCase
 		$helper = $this->factory->createService($sm->get('ControllerManager'));
 
 		$this->assertInstanceOf('MintSoft\Authorize\View\Helper\User', $helper);
-		$this->assertEquals($helper->getMvcKeeper(), $sm->get('Authorize\MvcKeeper'));
+		$this->assertEquals($helper->getMvcKeeper(), $sm->get('MintSoft\Authorize\MvcKeeper'));
 		$this->assertEquals($helper->getControllerManager(), $sm->get('ControllerManager'));
 		$this->assertEquals($helper->getRouteStack(), $sm->get('Router'));
 	}

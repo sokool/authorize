@@ -18,7 +18,7 @@ class UserFactory implements FactoryInterface
     {
 		$serviceManager = $serviceLocator->getServiceLocator();
         $helper         = new UserHelper();
-        $helper->setMvcKeeper($serviceManager->get('Authorize\MvcKeeper'));
+        $helper->setMvcKeeper($serviceManager->get('MintSoft\Authorize\MvcKeeper'));
         $helper->setControllerManager($serviceManager->get('ControllerManager'));
         $helper->setRouteStack($serviceManager->get('Router'));
 

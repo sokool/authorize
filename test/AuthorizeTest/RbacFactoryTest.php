@@ -26,7 +26,7 @@ class RbacFactoryTest extends \PHPUnit_Framework_TestCase
     public function testInstanceReturned()
     {
         $this->assertInstanceOf(
-            'Authorize\Service\RbacService',
+            'MintSoft\Authorize\Service\RbacService',
             $this->factory->createService(\Bootstrap::getServiceManager())
         );
     }

@@ -27,7 +27,7 @@ class AnnotationBuilder
      * @var array Default annotations to register
      */
     protected $defaultAnnotations = [
-        'Authorize\Annotation\Authorize',
+        'MintSoft\Authorize\Annotation\Authorize',
     ];
 
     /**

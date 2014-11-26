@@ -24,7 +24,7 @@ class RoleProviderTest extends \PHPUnit_Framework_TestCase
 
     public function testInstance()
     {
-        $this->assertInstanceOf('Authorize\Provider\Role\RoleProviderInterface', $this->roleProvider);
+        $this->assertInstanceOf('MintSoft\Authorize\Provider\Role\RoleProviderInterface', $this->roleProvider);
     }
 
     public function testGetAll()

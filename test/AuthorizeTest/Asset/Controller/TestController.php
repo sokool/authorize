@@ -9,39 +9,39 @@
 namespace AuthorizeTest\Asset\Controller;
 
 use Zend\Mvc\Controller\AbstractActionController;
+use MintSoft\Authorize\Annotation\Authorize;
 
 /**
  * @Authorize()
  */
 class TestController extends AbstractActionController
 {
-	/**
-	 * @Authorize({
-	 *      "roles"         : {"AWR"},
-	 *      "users"         : "can.be.anyone@flo.de",
-	 *      "permissions"   : "booking/create",
-	 * })
-	 *
-	 */
-	public function someSpecificCustomAction()
-	{
-	}
+    /**
+     * @Authorize({
+     *      "roles"         : {"AWR"},
+     *      "users"         : "can.be.anyone@flo.de",
+     *      "permissions"   : "booking/create",
+     * })
+     */
+    public function someSpecificCustomAction()
+    {
+    }
 
-	/**
-	 * @Authorize({
-	 *      "roles" : {"Upload", "Download"}
-	 * })
-	 */
-	public function forUploadAndDownloadAction()
-	{
-	}
+    /**
+     * @Authorize({
+     *      "roles" : {"Upload", "Download"}
+     * })
+     */
+    public function forUploadAndDownloadAction()
+    {
+    }
 
-	/**
-	 * @Authorize({
-	 *      "roles" : {"Grant"}
-	 * })
-	 */
-	public function saveAction()
-	{
-	}
+    /**
+     * @Authorize({
+     *      "roles" : {"Grant"}
+     * })
+     */
+    public function saveAction()
+    {
+    }
 }

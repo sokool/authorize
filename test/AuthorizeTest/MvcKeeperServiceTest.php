@@ -35,14 +35,17 @@ class MvcKeeperServiceTest extends \PHPUnit_Framework_TestCase
      */
     protected $mvcKeeper;
 
+    protected $cm;
+
     public function setUp()
     {
         $rbacService                = new RbacService(new RoleProvider(), new PermissionProvider());
         $authenticationService      = new AuthenticationService(new NonPersistent(), new FakeAdapter());
         $authorizeAnnotationBuilder = new AnnotationBuilder(
-            (new ControllerManager())
-                ->setAllowOverride(true)
-                ->setInvokableClass('can-be-anything', AnnotationBuilderServiceTest::ANNOTATION_A_CLASS)
+            $this->cm = (new ControllerManager())
+                //        ->setAllowOverride(true)
+                ->setInvokableClass('ControllerTestA', 'AuthorizeTest\Asset\Controller\TestController')
+                ->setInvokableClass('ControllerTestB', 'AuthorizeTest\Asset\Controller\TestBController')
                 ->setServiceLocator(\Bootstrap::getServiceManager())
         );
 
@@ -60,159 +63,163 @@ class MvcKeeperServiceTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($this->mvcKeeper->getIdentity(), self::IDENTITY);
     }
 
-	public function testAccess()
-	{
-		$this->assertTrue($this->mvcKeeper->hasAccess(AnnotationBuilderServiceTest::ANNOTATION_A_CLASS, 'forUploadAndDownloadAction'));
-	}
+    public function testAccess()
+    {
+        $this->assertTrue($this->mvcKeeper->hasAccess(AnnotationBuilderServiceTest::ANNOTATION_A_CLASS, 'forUploadAndDownloadAction'));
+    }
 
-	/**
-	 * Testing:
-	 * attach()
-	 *
-	 * Check if attaching listeners properly save callback in protected container
-	 */
-	public function testAttach()
-	{
-		$event = new EventManager();
+    /**
+     * Testing:
+     * attach()
+     *
+     * Check if attaching listeners properly save callback in protected container
+     */
+    public function testAttach()
+    {
+        $event = new EventManager();
 
-		/** @var \Closure $closure */
-		$closure = function() {
-			return $this->listeners;
-		};
+        /** @var \Closure $closure */
+        $closure = function () {
+            return $this->listeners;
+        };
 
-		$this->mvcKeeper->attach($event);
+        $this->mvcKeeper->attach($event);
 
-		$getListeners = $closure->bindTo($this->mvcKeeper, get_class($this->mvcKeeper));
-		$listeners    = $getListeners();
+        $getListeners = $closure->bindTo($this->mvcKeeper, get_class($this->mvcKeeper));
+        $listeners    = $getListeners();
 
-		foreach ($listeners as $listener) {
-			$this->assertInstanceOf('Zend\Stdlib\CallbackHandler', $listener);
-		}
-	}
+        foreach ($listeners as $listener) {
+            $this->assertInstanceOf('Zend\Stdlib\CallbackHandler', $listener);
+        }
+    }
 
-	/**
-	 * Testing:
-	 * isAllowed()
-	 *
-	 * Check if without identity you will be not allowed to gain access
-	 */
-	public function testIsAllowedNoIdentity()
-	{
-		$mock = $this->getMock(
-			get_class($this->mvcKeeper),
-			[
-				'getIdentity',
-				'getRbac'
-			],
-			[
-				$this->mvcKeeper->getRbac(),
-				$this->mvcKeeper->getAuthenticationService(),
-				$this->mvcKeeper->getAuthorizeBuilder()
-			]
-		);
+    /**
+     * Testing:
+     * isAllowed()
+     *
+     * Check if without identity you will be not allowed to gain access
+     */
+    public function testIsAllowedNoIdentity()
+    {
+        $mock = $this->getMock(
+            get_class($this->mvcKeeper),
+            [
+                'getIdentity',
+                'getRbac'
+            ],
+            [
+                $this->mvcKeeper->getRbac(),
+                $this->mvcKeeper->getAuthenticationService(),
+                $this->mvcKeeper->getAuthorizeBuilder()
+            ]
+        );
 
-		$class  = new \ReflectionClass(get_class($mock));
-		$method = $class->getMethod('isAllowed');
-		$method->setAccessible(true);
+        $class  = new \ReflectionClass(get_class($mock));
+        $method = $class->getMethod('isAllowed');
+        $method->setAccessible(true);
 
-		$authorize = new Authorize([]);
+        $authorize = new Authorize([]);
 
-		$this->assertFalse($method->invoke($mock, $authorize));
-	}
+        $this->assertFalse($method->invoke($mock, $authorize));
+    }
 
-	/**
-	 * Testing:
-	 * isAllowed()
-	 *
-	 * Checking two cases:
-	 *  - check access by permission
-	 *  - check access by role
-	 */
-	public function testIsAllowed()
-	{
-		$class  = new \ReflectionClass(get_class($this->mvcKeeper));
-		$method = $class->getMethod('isAllowed');
-		$method->setAccessible(true);
+    /**
+     * Testing:
+     * isAllowed()
+     *
+     * Checking two cases:
+     *  - check access by permission
+     *  - check access by role
+     */
+    public function testIsAllowed()
+    {
+        $class  = new \ReflectionClass(get_class($this->mvcKeeper));
+        $method = $class->getMethod('isAllowed');
+        $method->setAccessible(true);
 
-		$authorizeByPermission = new Authorize([
-			'value' => [
-				'permissions' => [
-					'render-default-page'
-			    ]
-			]
-		]);
+        $authorizeByPermission = new Authorize([
+            'value' => [
+                'permissions' => [
+                    'render-default-page'
+                ]
+            ]
+        ]);
 
-		$authorizeByRole = new Authorize([
-			'value' => [
-				'roles' => [
-					'Download'
-				]
-			]
-		]);
+        $authorizeByRole = new Authorize([
+            'value' => [
+                'roles' => [
+                    'Download'
+                ]
+            ]
+        ]);
 
-		$this->assertTrue($method->invoke($this->mvcKeeper, $authorizeByPermission));
-		$this->assertTrue($method->invoke($this->mvcKeeper, $authorizeByRole));
-	}
+        $this->assertTrue($method->invoke($this->mvcKeeper, $authorizeByPermission));
+        $this->assertTrue($method->invoke($this->mvcKeeper, $authorizeByRole));
+    }
 
-	/**
-	 * Testing:
-	 * isAllowed()
-	 *
-	 * Check if user will gain access when asking for role/permission which user haven't
-	 */
-	public function testIsAllowedNotMyRole()
-	{
-		$class  = new \ReflectionClass(get_class($this->mvcKeeper));
-		$method = $class->getMethod('isAllowed');
-		$method->setAccessible(true);
+    /**
+     * Testing:
+     * isAllowed()
+     *
+     * Check if user will gain access when asking for role/permission which user haven't
+     */
+    public function testIsAllowedNotMyRole()
+    {
+        $class  = new \ReflectionClass(get_class($this->mvcKeeper));
+        $method = $class->getMethod('isAllowed');
+        $method->setAccessible(true);
 
-		$authorize = new Authorize([
-			'value' => [
-				'roles' => [
-					'NotMyRole'
-				],
-				'permissions' => [
-					'grant-for-all-users',
-				]
-			]
-		]);
+        $authorize = new Authorize([
+            'value' => [
+                'roles'       => [
+                    'NotMyRole'
+                ],
+                'permissions' => [
+                    'grant-for-all-users',
+                ]
+            ]
+        ]);
 
-		$this->assertFalse($method->invoke($this->mvcKeeper, $authorize));
-	}
+        $this->assertFalse($method->invoke($this->mvcKeeper, $authorize));
+    }
 
-	/**
-	 * Testing:
-	 * onRoute()
-	 *
-	 * Checks if response status code was set to 403 when user doesn't have access
-	 */
-	public function testOnRoute()
-	{
-		$mock = $this->getMock(
-			get_class($this->mvcKeeper),
-			[
-				'hasAccess'
-			],
-			[
-				$this->mvcKeeper->getRbac(),
-				$this->mvcKeeper->getAuthenticationService(),
-				$this->mvcKeeper->getAuthorizeBuilder()
-			]
-		);
+    /**
+     * Testing:
+     * onRoute()
+     *
+     * Checks if response status code was set to 403 when user doesn't have access
+     */
+    public function testOnRoute()
+    {
+//        $mock = $this->getMock(
+//            get_class($this->mvcKeeper),
+//            [
+//                'hasAccess'
+//            ],
+//            [
+//                $this->mvcKeeper->getRbac(),
+//                $this->mvcKeeper->getAuthenticationService(),
+//                $this->mvcKeeper->getAuthorizeBuilder()
+//            ]
+//        );
+        $mock = $this->mvcKeeper;
 
-		$mock->expects($this->any())
-			->method('hasAccess')
-			->will($this->returnValue(false));
+//        $mock->expects($this->any())
+//            ->method('hasAccess')
+//            ->will($this->returnValue(false));
 
-		$event       = new MvcEvent();
-		$application = new Application([], \Bootstrap::getServiceManager());
-		$routeMatch  = new RouteMatch(['controller' => 'Flo\Controller\Test', 'action' => 'someSpecificCustom']);
-		$response    = new Response();
-		$event->setApplication($application);
-		$event->setRouteMatch($routeMatch);
-		$event->setResponse($response);
 
-		$mock->onRoute($event);
-		$this->assertEquals(403, $event->getResponse()->getStatusCode());
-	}
+        \Bootstrap::getServiceManager()->setAllowOverride(true)->setService('ControllerManager', $this->cm);
+
+        $event          = new MvcEvent();
+        $routeMatch     = new RouteMatch(['controller' => 'ControllerTestA', 'action' => 'someSpecificCustom']);
+        $response       = new Response();
+        $application    = new Application([], \Bootstrap::getServiceManager());
+        $event->setApplication($application);
+        $event->setRouteMatch($routeMatch);
+        $event->setResponse($response);
+
+        $mock->onRoute($event);
+        $this->assertEquals(403, $event->getResponse()->getStatusCode());
+    }
 }

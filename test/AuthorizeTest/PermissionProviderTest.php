@@ -24,7 +24,7 @@ class PermissionProviderTest extends \PHPUnit_Framework_TestCase
 
     public function testInstance()
     {
-        $this->assertInstanceOf('Authorize\Provider\Permission\PermissionProviderInterface', $this->permissionProvider);
+        $this->assertInstanceOf('MintSoft\Authorize\Provider\Permission\PermissionProviderInterface', $this->permissionProvider);
     }
 
     public function testGetAll()

@@ -164,12 +164,15 @@ class MvcKeeper implements ListenerAggregateInterface
      */
     public function hasAccess($className, $methodName)
     {
-        $authorizeConfig     = $this->authorizeBuilder->getAuthorizeConfig();
-        $controllerAuthorize = $authorizeConfig[$className];
+        $authorizeConfig = $this->authorizeBuilder->getAuthorizeConfig();
+        if (!array_key_exists($className, $authorizeConfig)) {
+            return true;
+        }
 
         // Check access based on collected annotations.
         // Checking access on class level.
-        $accessAllowed = true;
+        $accessAllowed       = true;
+        $controllerAuthorize = $authorizeConfig[$className];
         if ($controllerAuthorize['class']) {
             $accessAllowed = $this->isAllowed($controllerAuthorize['class']) && $accessAllowed;
         }

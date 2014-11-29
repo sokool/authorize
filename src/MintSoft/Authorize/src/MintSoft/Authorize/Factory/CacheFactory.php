@@ -8,7 +8,6 @@
 
 namespace MintSoft\Authorize\Factory;
 
-//use Nette\Diagnostics\Debugger;
 use Zend\Cache\Storage\Adapter\Memory as MemoryCache;
 use Zend\Cache\StorageFactory;
 use Zend\ServiceManager\FactoryInterface;
@@ -25,7 +24,12 @@ class CacheFactory implements FactoryInterface
         }
 
         $cacheOptions = $configuration['authorize']['cache'];
-        $cacheAdapter = StorageFactory::factory($cacheOptions);
+        try {
+            $cacheAdapter = StorageFactory::factory($cacheOptions);
+        } catch (\Exception $e) {
+            echo $e->getMessage();
+            exit;
+        }
 
         return $cacheAdapter;
     }

@@ -10,24 +10,9 @@ use Zend\ModuleManager\Feature\ViewHelperProviderInterface;
 
 class Module implements
     ServiceProviderInterface,
-    BootstrapListenerInterface,
     ConfigProviderInterface,
     ViewHelperProviderInterface
 {
-
-    public function onBootstrap(EventInterface $e)
-    {
-        //Authorize module works only with Http Response.
-        if (!$e->getResponse() instanceof HttpResponse) {
-            return;
-        }
-
-        $eventManager   = $e->getTarget()->getEventManager();
-        $serviceManager = $e->getTarget()->getServiceManager();
-
-        $eventManager->attach($serviceManager->get('MintSoft\Authorize\MvcKeeper'));
-        $eventManager->attach($serviceManager->get('MintSoft\Authorize\AccessForbiddenStrategy'));
-    }
 
     public function getConfig()
     {

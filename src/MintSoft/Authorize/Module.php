@@ -5,13 +5,15 @@ use Zend\EventManager\EventInterface;
 use Zend\Http\Response as HttpResponse;
 use Zend\ModuleManager\Feature\BootstrapListenerInterface;
 use Zend\ModuleManager\Feature\ConfigProviderInterface;
+use Zend\ModuleManager\Feature\ControllerPluginProviderInterface;
 use Zend\ModuleManager\Feature\ServiceProviderInterface;
 use Zend\ModuleManager\Feature\ViewHelperProviderInterface;
 
 class Module implements
     ServiceProviderInterface,
     ConfigProviderInterface,
-    ViewHelperProviderInterface
+    ViewHelperProviderInterface,
+    ControllerPluginProviderInterface
 {
 
     public function getConfig()
@@ -27,6 +29,11 @@ class Module implements
     public function getViewHelperConfig()
     {
         return include __DIR__ . '/../../../config/view_helper.config.php';
+    }
+
+    public function getControllerPluginConfig()
+    {
+        return include __DIR__ . '/../../../config/controller_plugin.config.php';
     }
 
     public function getAutoloaderConfig()

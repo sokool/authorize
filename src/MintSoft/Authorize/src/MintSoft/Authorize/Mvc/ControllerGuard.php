@@ -11,7 +11,6 @@ namespace MintSoft\Authorize\Mvc;
 use MintSoft\Authorize\Annotation\Authorize as AuthorizeAnnotation;
 use MintSoft\Authorize\Annotation\AuthorizeBuilder;
 use MintSoft\Authorize\Authorize;
-use Nette\Diagnostics\Debugger;
 use Zend\Mvc\Controller\ControllerManager;
 use Zend\Cache\Storage\Adapter\Memory as MemoryCache;
 use Zend\Cache\Storage\Adapter\AbstractAdapter as AbstractCacheStorage;
@@ -161,9 +160,9 @@ class ControllerGuard
      * Check if for given Authorize annotation, access is allowed for given identity,
      * it's roles and permissions.
      *
-     * @param AuthorizeAnnotation $annotation
+     * @param array $annotations
      *
-     * @param null                $identity
+     * @param null  $identity
      *
      * @return bool TRUE if authorization is allowed, otherwise FALSE
      */

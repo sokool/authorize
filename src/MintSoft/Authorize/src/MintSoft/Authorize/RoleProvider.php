@@ -9,6 +9,7 @@
 namespace MintSoft\Authorize;
 
 use Nette\Diagnostics\Debugger;
+use Zend\Debug\Debug;
 use Zend\Permissions\Rbac\Role;
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
@@ -36,14 +37,14 @@ class RoleProvider implements RoleProvidable, FactoryInterface
      */
     public function allRoles($identity)
     {
-        if ($identity) {
-            return [
-                'Administrator' => ['edit', 'create', 'view'],
-                'Editor'        => [],
-                'Root'          => [],
-            ];
+        if (!$identity) {
+            return [];
         }
 
-        return [];
+        return [
+            'Administrator' => ['edit', 'create', 'view'],
+            'Editor'        => [],
+            'Root'          => [],
+        ];
     }
 }

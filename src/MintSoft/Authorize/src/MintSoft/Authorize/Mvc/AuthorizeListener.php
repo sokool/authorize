@@ -45,7 +45,7 @@ class AuthorizeListener implements ListenerAggregateInterface
         /** @var Authorize $authorize */
         $serviceManager  = $mvcEvent->getApplication()->getServiceManager();
         $controllerGuard = $serviceManager->get('MintSoft\Authorize\ControllerGuard');
-        $identity        = 't';
+        $identity        = 'a';
         try {
             $identity = $serviceManager->get('Zend\Authentication\AuthenticationService')->getIdentity();
         } catch (ServiceNotFoundException $notFound) {

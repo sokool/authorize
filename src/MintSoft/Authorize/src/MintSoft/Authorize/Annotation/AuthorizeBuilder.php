@@ -25,7 +25,6 @@ class AuthorizeBuilder
      * @var array Default annotations to register
      */
     protected $defaultAnnotations = [
-        //'MintSoft\Authorize\Annotation\Authorize',
         'MintSoft\Authorize\Annotation\Role',
         'MintSoft\Authorize\Annotation\Lockable',
         'MintSoft\Authorize\Annotation\Authenticated',

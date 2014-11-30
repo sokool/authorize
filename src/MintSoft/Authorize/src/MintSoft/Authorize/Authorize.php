@@ -101,18 +101,18 @@ class Authorize
     protected function getRbac($identity)
     {
         $cacheKey = is_string($identity) ? $identity : null;
-        if ($cacheKey) {
-            $cacheAdapter = $this->getCacheAdapter();
-            $container    = $cacheAdapter->getItem($cacheKey);
-            if (!empty($container)) {
-                $container = unserialize($container);
-                $cacheAdapter->setItem($cacheKey, serialize($container));
+        $cacheKey = is_object($identity) ? spl_object_hash($identity) : $cacheKey;
 
-                return $container;
+        $cacheAdapter = $this->getCacheAdapter();
+        if ($cacheKey) {
+            $container = $cacheAdapter->getItem($cacheKey);
+            if (!empty($container)) {
+                return unserialize($container);
             }
         }
 
         $container = $this->buildRbac($this->getRoleProvider()->allRoles($identity));
+        $cacheAdapter->setItem($cacheKey, serialize($container));
 
         return $container;
     }

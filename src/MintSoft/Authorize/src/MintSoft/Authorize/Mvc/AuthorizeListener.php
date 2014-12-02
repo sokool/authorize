@@ -9,7 +9,6 @@
 namespace MintSoft\Authorize\Mvc;
 
 use MintSoft\Authorize\Authorize;
-use Nette\Diagnostics\Debugger;
 use Zend\EventManager\EventManagerInterface;
 use Zend\EventManager\ListenerAggregateInterface;
 use Zend\EventManager\ListenerAggregateTrait;

@@ -2,6 +2,6 @@
 
 return [
     'factories' => [
-        'identity' => 'MintSoft\Authorize\Mvc\Controller\Plugin\Service\IdentityFactory'
+        'user' => 'MintSoft\Authorize\Mvc\Controller\Plugin\Service\UserFactory'
     ],
 ];

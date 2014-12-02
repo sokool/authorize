@@ -9,21 +9,23 @@
 namespace MintSoft\Authorize\Mvc\Controller\Plugin;
 
 use MintSoft\Authorize\Mvc\ControllerGuard;
-use Nette\Diagnostics\Debugger;
 use Zend\Mvc\Controller\Plugin\Identity as ZendIdentity;
 use Zend\Mvc\Router\SimpleRouteStack;
 use Zend\Http\Request as HttpRequest;
 
-class Identity extends ZendIdentity
+class User extends ZendIdentity
 {
     /**
      * @var ControllerGuard
      */
     protected $controllerGuard;
 
+    /**
+     * @var SimpleRouteStack
+     */
     protected $router;
 
-    protected $identity;
+    protected $identity = null;
 
     public function __construct(ControllerGuard $controllerGuard)
     {
@@ -31,7 +33,23 @@ class Identity extends ZendIdentity
     }
 
     /**
-     * @param \Zend\Mvc\Router\SimpleRouteStack $routeStack
+     * @return mixed
+     */
+    public function getIdentity()
+    {
+        return $this->identity;
+    }
+
+    /**
+     * @param mixed $identity
+     */
+    public function setIdentity($identity)
+    {
+        $this->identity = $identity;
+    }
+
+    /**
+     * @param SimpleRouteStack $routeStack
      *
      * @return $this
      */
@@ -43,7 +61,7 @@ class Identity extends ZendIdentity
     }
 
     /**
-     * @return \Zend\Mvc\Router\SimpleRouteStack
+     * @return SimpleRouteStack
      */
     protected function getRouter()
     {
@@ -61,7 +79,7 @@ class Identity extends ZendIdentity
     public function __invoke($identity = null)
     {
         if (is_null($identity)) {
-            return parent::__invoke();
+            $this->identity = $this->getIdentity();
         }
 
         $this->identity = $identity;

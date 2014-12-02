@@ -8,12 +8,11 @@
 
 namespace MintSoft\Authorize\Mvc\Controller\Plugin\Service;
 
-use MintSoft\Authorize\Mvc\Controller\Plugin\Identity;
-use Nette\Diagnostics\Debugger;
+use MintSoft\Authorize\Mvc\Controller\Plugin\User;
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
-class IdentityFactory implements FactoryInterface
+class UserFactory implements FactoryInterface
 {
     /**
      * Create service
@@ -25,10 +24,10 @@ class IdentityFactory implements FactoryInterface
     public function createService(ServiceLocatorInterface $serviceLocator)
     {
         $services = $serviceLocator->getServiceLocator();
-        $helper   = new Identity($services->get('MintSoft\Authorize\ControllerGuard'));
+        $helper   = new User($services->get('MintSoft\Authorize\ControllerGuard'));
         $helper->setRouter($services->get('Router'));
         if ($services->has('Zend\Authentication\AuthenticationService')) {
-            $helper->setAuthenticationService($services->get('Zend\Authentication\AuthenticationService'));
+            $helper->setIdentity($services->get('Zend\Authentication\AuthenticationService')->getIdentity());
         }
 
         return $helper;

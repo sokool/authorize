@@ -41,10 +41,11 @@ class RoleProvider implements RoleProvidable, FactoryInterface
             return [];
         }
 
+
         return [
-            'Administrator' => ['edit', 'create', 'view'],
-            'Editor'        => [],
-            'Root'          => [],
+            //'Administrator' => ['edit', 'create', 'view'],
+            //'Editor'        => [],
+            //'Root'          => ['test'],
         ];
     }
 }

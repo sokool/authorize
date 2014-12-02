@@ -46,18 +46,19 @@ class AuthorizeListener implements ListenerAggregateInterface
         $serviceManager  = $mvcEvent->getApplication()->getServiceManager();
         $controllerGuard = $serviceManager->get('MintSoft\Authorize\ControllerGuard');
         $identity        = null;
+        $routeMatch      = $mvcEvent->getRouteMatch();
         try {
             $identity = $serviceManager->get('Zend\Authentication\AuthenticationService')->getIdentity();
         } catch (ServiceNotFoundException $notFound) {
         }
 
         // If access is denied, then set Http response as 403 - AccessForbidden
-        if (!$controllerGuard->hasAccess($mvcEvent->getRouteMatch(), $identity)) {
+        if (!$controllerGuard->hasAccess($routeMatch, $identity)) {
             $mvcEvent->getResponse()->setStatusCode(Response::STATUS_CODE_403);
             $mvcEvent
                 ->setError('Not allowed')
                 ->setViewModel(
-                    (new ViewModel())
+                    (new ViewModel(['routeMatch' => $routeMatch]))
                         ->setTemplate('error/403'));
         }
     }

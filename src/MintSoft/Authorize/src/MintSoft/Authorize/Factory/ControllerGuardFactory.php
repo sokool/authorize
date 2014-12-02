@@ -26,11 +26,11 @@ class ControllerGuardFactory implements FactoryInterface
         /** @var Authorize $authorize */
         $controllerManager = $serviceLocator->get('ControllerManager');
         $authorize         = $serviceLocator->get('MintSoft\Authorize');
-        $authorizeBuilder  = $serviceLocator->get('MintSoft\Authorize\AuthorizeBuilder');
+        $annotationBuilder = new AuthorizeBuilder();
         $cacheAdapter      = $serviceLocator->get('MintSoft\Authorize\Cache');
 
         return (new ControllerGuard($authorize, $controllerManager))
-            ->setAuthorizeBuilder($authorizeBuilder)
+            ->setAuthorizeBuilder($annotationBuilder)
             ->setCacheAdapter($cacheAdapter);
     }
 }

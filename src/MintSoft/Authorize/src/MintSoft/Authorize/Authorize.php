@@ -8,11 +8,11 @@
 
 namespace MintSoft\Authorize;
 
-use Nette\Diagnostics\Debugger;
 use Zend\Cache\Storage\Adapter\AbstractAdapter as CacheAdapter;
 use Zend\Cache\Storage\Adapter\Memory as MemoryCache;
 use Zend\Permissions\Rbac\Rbac;
 use Zend\Permissions\Rbac\Role;
+use Zend\Permissions\Rbac\Exception as RbacException;
 
 class Authorize
 {
@@ -146,9 +146,12 @@ class Authorize
         if ($identity == null) {
             return false;
         }
-
-        return $this
-            ->getRbac($identity)
-            ->isGranted($role, $permission);
+        try {
+            return $this
+                ->getRbac($identity)
+                ->isGranted($role, $permission);
+        } catch (RbacException\InvalidArgumentException $e) {
+            return false;
+        }
     }
 }

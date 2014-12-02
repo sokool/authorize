@@ -172,10 +172,14 @@ class ControllerGuard
             return true;
         }
 
+        $allowed       = false;
         $authenticated = array_key_exists('authenticated', $annotations) ? $annotations['authenticated'] : null;
         $roles         = array_key_exists('roles', $annotations) ? $annotations['roles'] : null;
         $lock          = array_key_exists('lock', $annotations) ? $annotations['lock'] : null;
 
+        if (empty($authenticated) && empty($roles)) {
+            return true;
+        }
         // Checking all the annotation resources
         if ($authenticated) {
             if ($identity == null) {
@@ -183,10 +187,11 @@ class ControllerGuard
             }
             $name = $authenticated->getName();
 
-            return empty($name) ? true : $name == $identity;
+            $allowed = empty($name) ? true : $name == $identity;
         }
 
-        foreach ($roles as $role) {
+        foreach ((array) $roles as $role) {
+            $allowed  = false;
             $roleName = $role->getName();
             if (($permissions = $role->getPermissions())) {
                 foreach ($permissions as $permission) {
@@ -202,7 +207,7 @@ class ControllerGuard
             }
         }
 
-        return false;
+        return $allowed;
     }
 
     /**

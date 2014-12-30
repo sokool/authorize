@@ -10,12 +10,14 @@ namespace MintSoft\Authorize;
 
 use Zend\Cache\Storage\Adapter\AbstractAdapter as CacheAdapter;
 use Zend\Cache\Storage\Adapter\Memory as MemoryCache;
+use Zend\Permissions\Rbac\Exception as RbacException;
 use Zend\Permissions\Rbac\Rbac;
 use Zend\Permissions\Rbac\Role;
-use Zend\Permissions\Rbac\Exception as RbacException;
+use Zend\Stdlib\Guard\ArrayOrTraversableGuardTrait;
 
 class Authorize
 {
+    use ArrayOrTraversableGuardTrait;
     /**
      * @var CacheAdapter
      */
@@ -76,8 +78,9 @@ class Authorize
      *
      * @return Rbac
      */
-    private function buildRbac(array $roles)
+    private function buildRbac($roles)
     {
+        $this->guardForArrayOrTraversable($roles, 'Roles');
         $container = new Rbac();
         foreach ($roles as $roleName => $role) {
             if (is_array($role)) {

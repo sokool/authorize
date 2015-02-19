@@ -14,7 +14,7 @@
     "homepage": "https://github.com/sokool/authorize",
     "require": {
         "php": ">=5.4",
-        "zendframework/zend-permissions-rbac": ">= 2.3",
+        "zendframework/zend-permissions-rbac": ">= 2.3"
     },
     "autoload": {
         "psr-0": {

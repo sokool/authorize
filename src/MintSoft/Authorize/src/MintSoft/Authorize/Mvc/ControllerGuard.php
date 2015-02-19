@@ -8,12 +8,12 @@
 
 namespace MintSoft\Authorize\Mvc;
 
+use MintSoft\Authorize\Annotation\AnnotationBuilder;
 use MintSoft\Authorize\Annotation\Authorize as AuthorizeAnnotation;
-use MintSoft\Authorize\Annotation\AuthorizeBuilder;
 use MintSoft\Authorize\Authorize;
-use Zend\Mvc\Controller\ControllerManager;
-use Zend\Cache\Storage\Adapter\Memory as MemoryCache;
 use Zend\Cache\Storage\Adapter\AbstractAdapter as AbstractCacheStorage;
+use Zend\Cache\Storage\Adapter\Memory as MemoryCache;
+use Zend\Mvc\Controller\ControllerManager;
 use Zend\Mvc\Router\RouteMatch;
 
 class ControllerGuard
@@ -26,7 +26,7 @@ class ControllerGuard
     protected $authorize;
 
     /**
-     * @var AuthorizeBuilder
+     * @var AnnotationBuilder
      */
     protected $authorizeBuilder;
 
@@ -83,7 +83,7 @@ class ControllerGuard
     }
 
     /**
-     * @return AuthorizeBuilder
+     * @return AnnotationBuilder
      */
     public function getAuthorizeBuilder()
     {
@@ -91,17 +91,17 @@ class ControllerGuard
             return $this->authorizeBuilder;
         }
 
-        $this->setAuthorizeBuilder(new AuthorizeBuilder);
+        $this->setAuthorizeBuilder(new AnnotationBuilder);
 
         return $this->authorizeBuilder;
     }
 
     /**
-     * @param AuthorizeBuilder $authorizeBuilder
+     * @param AnnotationBuilder $authorizeBuilder
      *
      * @return $this
      */
-    public function setAuthorizeBuilder(AuthorizeBuilder $authorizeBuilder)
+    public function setAuthorizeBuilder(AnnotationBuilder $authorizeBuilder)
     {
         $this->authorizeBuilder = $authorizeBuilder;
 

@@ -1,0 +1,31 @@
+<?xml version="1.0" ?>
+
+<container xmlns="http://symfony.com/schema/dic/services"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <parameters>
+        <parameter key="rbac.role.provider.class">MintSoft\Authorize\Bundle\Provider\RoleProvider</parameter>
+        <parameter key="rbac.controller.guard.class">MintSoft\Authorize\ClassGuard</parameter>
+        <parameter key="rbac.annotation.listener.class">MintSoft\Authorize\Bundle\Listener\RbacAnnotationListener</parameter>
+        <parameter key="rbac.annotation.reader.class">MintSoft\Authorize\Bundle\AnnotationReader</parameter>
+        <parameter key="rbac.annotation.builder.class">MintSoft\Authorize\Annotation\Builder</parameter>
+    </parameters>
+
+    <services>
+        <service id="rbac.annotation.listener" class="%rbac.annotation.listener.class%">
+            <tag name="kernel.event_listener" event="kernel.controller" method="onKernelController"/>
+        </service>
+        <service id="rbac.annotation.reader" class="%rbac.annotation.reader.class%">
+            <argument type="service" id="annotation_reader"/>
+        </service>
+        <service id="rbac.annotation.builder" class="%rbac.annotation.builder.class%">
+            <argument type="service" id="rbac.annotation.reader"/>
+        </service>
+        <service id="rbac.role.provider" class="%rbac.role.provider.class%"/>
+        <service id="rbac.controller.guard" class="%rbac.controller.guard.class%">
+            <argument type="service" id="rbac.annotation.builder"/>
+            <argument type="service" id="rbac.role.provider"/>
+        </service>
+    </services>
+</container>

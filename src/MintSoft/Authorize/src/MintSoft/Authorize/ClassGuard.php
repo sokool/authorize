@@ -10,24 +10,24 @@ namespace MintSoft\Authorize;
 
 use MintSoft\Authorize\Annotation\AnnotationSet;
 use MintSoft\Authorize\Annotation\Authenticated;
-use MintSoft\Authorize\Annotation\AuthorizeBuilder;
+use MintSoft\Authorize\Annotation\Builder as AnnotationBuilder;
 use MintSoft\Authorize\Annotation\Role;
 use Zend\Permissions\Rbac\Rbac;
 
 class ClassGuard
 {
-    protected $annotationBuilder;
+    protected $builder;
 
-    protected $roleProvider;
+    protected $provider;
 
     /**
-     * @param AuthorizeBuilder $builder
-     * @param RoleProvidable   $roleProvider
+     * @param AnnotationBuilder $builder
+     * @param RoleProvidable    $roleProvider
      */
-    public function __construct(AuthorizeBuilder $builder, RoleProvidable $roleProvider)
+    public function __construct(AnnotationBuilder $builder, RoleProvidable $roleProvider)
     {
-        $this->annotationBuilder = $builder;
-        $this->roleProvider      = $roleProvider;
+        $this->builder  = $builder;
+        $this->provider = $roleProvider;
     }
 
     /**
@@ -79,17 +79,16 @@ class ClassGuard
 
     /**
      * @param AnnotationSet $classAnnotations
-     * @param string        $namespace
      * @param string        $identity
      *
      * @return bool
      */
-    private function checkBlock(AnnotationSet $classAnnotations, $namespace, $identity)
+    private function checkBlock(AnnotationSet $classAnnotations, $identity)
     {
         $allowed         = true;
         $container       = $this->getContainer($identity);
-        $authAnnotation  = $classAnnotations->getAuthenticated($namespace);
-        $roleAnnotations = $classAnnotations->getRoles($namespace);
+        $authAnnotation  = $classAnnotations->getAuthenticated();
+        $roleAnnotations = $classAnnotations->getRoles();
 
         if (!$this->checkAuthentication($authAnnotation, $identity)) {
             return false;
@@ -112,9 +111,11 @@ class ClassGuard
      */
     private function getContainer($identity)
     {
-        if ($this->roleProvider->refresh()) {
-            return $this->roleProvider->allRoles($identity);
+        if ($this->provider->refresh()) {
+            $this->roles = $this->provider->allRoles($identity);
         }
+
+        return $this->roles;
     }
 
     /**
@@ -126,14 +127,13 @@ class ClassGuard
      */
     public function isAllowed($className, $methodName = null, $identity = null)
     {
-        $classAnnotations = $this->annotationBuilder->addClass($className)->buildAnnotations()[$className];
-
+        $classAnnotations = $this->builder->addClass($className)->build()[$className];
         //Check on ClassName Level
-        $allowed = $this->checkBlock($classAnnotations, $className, $identity);
+        $allowed = $this->checkBlock($classAnnotations, $identity);
         if ($allowed) {
             //Check on ClassMethodName Level
             if ($methodName) {
-                return $this->checkBlock($classAnnotations, $methodName, $identity);
+                return $this->checkBlock($classAnnotations->getSet($methodName), $identity);
             }
         }
 

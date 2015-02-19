@@ -8,10 +8,9 @@
 
 namespace MintSoft\Authorize\Factory;
 
-use MintSoft\Authorize\Annotation\AuthorizeBuilder;
+use MintSoft\Authorize\Annotation\AnnotationBuilder;
 use MintSoft\Authorize\Authorize;
 use MintSoft\Authorize\Mvc\ControllerGuard;
-
 use Zend\Mvc\Controller\ControllerManager;
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
@@ -21,12 +20,12 @@ class ControllerGuardFactory implements FactoryInterface
 
     public function createService(ServiceLocatorInterface $serviceLocator)
     {
-        /** @var $authorizeBuilder AuthorizeBuilder */
+        /** @var $authorizeBuilder AnnotationBuilder */
         /** @var $controllerManager ControllerManager */
         /** @var Authorize $authorize */
         $controllerManager = $serviceLocator->get('ControllerManager');
         $authorize         = $serviceLocator->get('MintSoft\Authorize');
-        $annotationBuilder = new AuthorizeBuilder();
+        $annotationBuilder = new AnnotationBuilder();
         $cacheAdapter      = $serviceLocator->get('MintSoft\Authorize\Cache');
 
         return (new ControllerGuard($authorize, $controllerManager))

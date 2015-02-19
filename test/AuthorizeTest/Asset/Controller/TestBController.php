@@ -7,18 +7,24 @@
  */
 
 namespace AuthorizeTest\Asset\Controller;
+use MintSoft\Authorize\Annotation as Auth;
 
-use Zend\Mvc\Controller\AbstractActionController;
-
-class TestBController extends AbstractActionController
+/**
+ * @Auth\Authenticated()
+ * @Auth\Role("ASD")
+ */
+class TestBController
 {
 
+    /**
+     * @Auth\Role("Dispatcher")
+     */
     public function withoutAuthorizeAction()
     {
     }
 
     /**
-     * @Authorize
+     * @Auth\Role("Manager", {"manageEmployees", "manageOrders"})
      */
     public function authorizeWithoutParamsAction()
     {

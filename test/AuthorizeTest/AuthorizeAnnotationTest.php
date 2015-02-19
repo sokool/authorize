@@ -30,6 +30,7 @@ class AuthorizeAnnotationTest extends \PHPUnit_Framework_TestCase
 
     public function testFilled()
     {
+
         $authorizeAnnotation = new Authorize(['value' => [
             'roles'       => 'Download',
             'permissions' => 'profile-page',

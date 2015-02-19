@@ -30,11 +30,11 @@ final class Bootstrap
     {
         self::autoloader();
 
-        $serviceManager = new ServiceManager(new ServiceManagerConfig());
-        $serviceManager->setService('ApplicationConfig', include __DIR__ . '/application.config.php');
-        $serviceManager->get('ModuleManager')->loadModules();
-
-        self::$serviceManager = $serviceManager;
+//        $serviceManager = new ServiceManager(new ServiceManagerConfig());
+//        $serviceManager->setService('ApplicationConfig', include __DIR__ . '/application.config.php');
+//        $serviceManager->get('ModuleManager')->loadModules();
+//
+//        self::$serviceManager = $serviceManager;
     }
 
     /**

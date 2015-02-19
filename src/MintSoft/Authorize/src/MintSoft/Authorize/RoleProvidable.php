@@ -8,14 +8,21 @@
 
 namespace MintSoft\Authorize;
 
-use Zend\Permissions\Rbac\Role;
+use Zend\Permissions\Rbac\Rbac;
 
 interface RoleProvidable
 {
     /**
+     * Determine
+     *
+     * @return boolean
+     */
+    public function refresh();
+
+    /**
      * @param $identity
      *
-     * @return Role[]
+     * @return Rbac
      */
     public function allRoles($identity);
 } 

@@ -10,24 +10,23 @@ namespace MintSoft\Authorize;
 
 use Nette\Diagnostics\Debugger;
 use Zend\Debug\Debug;
+use Zend\Permissions\Rbac\Rbac;
 use Zend\Permissions\Rbac\Role;
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
-class RoleProvider implements RoleProvidable, FactoryInterface
+class RoleProvider implements RoleProvidable
 {
-    protected $sm;
-
     /**
-     * Create service
+     * Determine
      *
-     * @param ServiceLocatorInterface $serviceLocator
-     *
-     * @return mixed
+     * @return boolean
      */
-    public function createService(ServiceLocatorInterface $serviceLocator)
+    public function refresh()
     {
-        return new self;
+        echo 'refresh';
+
+        return true;
     }
 
     /**
@@ -37,15 +36,20 @@ class RoleProvider implements RoleProvidable, FactoryInterface
      */
     public function allRoles($identity)
     {
+        $container = new Rbac;
         if (!$identity) {
-            return [];
+            return $container;
         }
 
+        $container->addRole(
+            (new Role('Manager'))
+                ->addPermission('ManageWorkStation')
+        );
 
-        return [
-            //'Administrator' => ['edit', 'create', 'view'],
-            //'Editor'        => [],
-            //'Root'          => ['test'],
-        ];
+        $dispatcher = (new Role('Dispatcher'))
+            ->addPermission('ManageTransport');
+
+        return $container
+            ->addRole($dispatcher);
     }
 }

@@ -8,7 +8,6 @@
 
 namespace MintSoft\Authorize\Annotation;
 
-use Nette\Diagnostics\Debugger;
 use Zend\Code\Annotation\AnnotationCollection;
 use Zend\Code\Annotation\AnnotationManager;
 use Zend\Code\Annotation\Parser\DoctrineAnnotationParser;
@@ -74,20 +73,17 @@ class AuthorizeBuilder
      *
      * @return Authorize|null
      */
-    protected function getAuthorizeAnnotations(AnnotationCollection $annotationCollection)
+    protected function getAuthorizeAnnotations(AnnotationSet $set, $namespace, AnnotationCollection $annotationCollection)
     {
-        $annotations = [];
         foreach ($annotationCollection as $annotation) {
             if ($annotation instanceof Role) {
-                $annotations['roles'][] = $annotation;
+                $set->addRole($annotation, $namespace);
             } elseif ($annotation instanceof Lockable) {
-                $annotations['lock'] = $annotation;
+//                $annotations['lock'] = $annotation;
             } elseif ($annotation instanceof Authenticated) {
-                $annotations['authenticated'] = $annotation;
+                $set->addAuthorize($annotation, $namespace);
             }
         }
-
-        return $annotations;
     }
 
     /**
@@ -122,16 +118,13 @@ class AuthorizeBuilder
             throw new \InvalidArgumentException('Can not get annotations from class which not exists');
         }
 
-        $configuration = [];
+        $annotationSet = new AnnotationSet($class);
         $reflection    = new ClassReflection($class);
         $manager       = $this->getAnnotationManager();
         $annotations   = $reflection->getAnnotations($manager);
 
         if ($annotations instanceof AnnotationCollection) {
-            $configuration = [
-                'class'   => $this->getAuthorizeAnnotations($annotations),
-                'methods' => []
-            ];
+            $this->getAuthorizeAnnotations($annotationSet, $class, $annotations);
         }
 
         foreach ($reflection->getMethods() as $method) {
@@ -139,24 +132,20 @@ class AuthorizeBuilder
             if (!$methodAnnotations) {
                 break;
             }
-            $authorizeAnnotation = $this->getAuthorizeAnnotations($methodAnnotations);
-            if ($authorizeAnnotation) {
-                $configuration['methods'][$method->getName()] = $authorizeAnnotation;
-            }
+            $this->getAuthorizeAnnotations($annotationSet, $method->getName(), $methodAnnotations);
         }
 
-        return $configuration;
+        return $annotationSet;
     }
 
+    /**
+     * @return AnnotationSet[]
+     */
     public function buildAnnotations()
     {
         $authorizeSpecs = [];
         foreach ($this->classes as $className) {
-            $annotations = $this->grab($className);
-            if (empty($annotations)) {
-                continue;
-            }
-            $authorizeSpecs[$className] = $annotations;
+            $authorizeSpecs[$className] = $this->grab($className);
         }
 
         return $authorizeSpecs;

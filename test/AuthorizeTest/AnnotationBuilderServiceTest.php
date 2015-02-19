@@ -8,7 +8,12 @@
 
 namespace AuthorizeTest;
 
-use MintSoft\Authorize\Annotation\AnnotationBuilder;
+use AuthorizeTest\Asset\Controller\TestBController;
+use AuthorizeTest\Asset\Controller\TestController;
+use MintSoft\Authorize\Annotation\AuthorizeBuilder;
+use MintSoft\Authorize\ClassGuard;
+use MintSoft\Authorize\Rbac\ZendRbac;
+use MintSoft\Authorize\RoleProvider;
 use Zend\Cache\Storage\Adapter\Memory;
 use Zend\Code\Annotation\AnnotationCollection;
 use Zend\Code\Annotation\AnnotationManager;
@@ -18,6 +23,27 @@ class AnnotationBuilderServiceTest extends \PHPUnit_Framework_TestCase
 {
 
     const ANNOTATION_A_CLASS = 'AuthorizeTest\Asset\Controller\TestController';
+
+    public function testAsd()
+    {
+
+        $classA        = get_class(new TestController());
+        $classAMethod1 = 'someSpecificCustomAction';
+        //$classAMethod1 = 'saveAction';
+
+        $classB = get_class(new TestBController());
+
+        $annotations = (new AuthorizeBuilder)
+            ->addClass($classA)
+            ->addClass($classB)
+            ->buildAnnotations();
+
+        $roles = $annotations[$classA]->getRoles($classAMethod1);
+
+
+        $classGuard = new ClassGuard(new AuthorizeBuilder, new RoleProvider);
+        $this->assertTrue($classGuard->isAllowed($classA, $classAMethod1, 'tomek'));
+    }
 
     /**
      * @return AnnotationBuilder
@@ -52,36 +78,36 @@ class AnnotationBuilderServiceTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($memoryCache, $service->getCacheAdapter());
     }
 
-	/**
-	 * Testing:
-	 * getAuthorizeConfig()
-	 * getCacheAdapter()
-	 * MemoryCache::getItem()
-	 *
-	 * Setting some testing array to cache and check if method properly load same array from cache
-	 */
-	public function testAuthorizeConfigCacheEmpty()
-	{
-		$service      = $this->createBuilder();
-		$builderCache = $service->getCacheAdapter();
-		$testingConf  = [
-			'someConf' => true
-		];
+    /**
+     * Testing:
+     * getAuthorizeConfig()
+     * getCacheAdapter()
+     * MemoryCache::getItem()
+     *
+     * Setting some testing array to cache and check if method properly load same array from cache
+     */
+    public function testAuthorizeConfigCacheEmpty()
+    {
+        $service      = $this->createBuilder();
+        $builderCache = $service->getCacheAdapter();
+        $testingConf  = [
+            'someConf' => true
+        ];
 
-		$builderCache->setItem(AnnotationBuilder::CACHE, serialize($testingConf));
+        $builderCache->setItem(AnnotationBuilder::CACHE, serialize($testingConf));
 
-		$service->getAuthorizeConfig();
+        $service->getAuthorizeConfig();
 
-		$this->assertEquals($testingConf, unserialize($builderCache->getItem(AnnotationBuilder::CACHE)));
+        $this->assertEquals($testingConf, unserialize($builderCache->getItem(AnnotationBuilder::CACHE)));
 
-		// clear settings
-		$builderCache->setItem(AnnotationBuilder::CACHE, null);
-	}
+        // clear settings
+        $builderCache->setItem(AnnotationBuilder::CACHE, null);
+    }
 
-	public function testAuthorizeConfigCache()
-	{
-		$service      = $this->createBuilder();
-		$builderCache = $service->getCacheAdapter();
+    public function testAuthorizeConfigCache()
+    {
+        $service      = $this->createBuilder();
+        $builderCache = $service->getCacheAdapter();
 
         $this->assertNull($builderCache->getItem(AnnotationBuilder::CACHE));
 
@@ -118,25 +144,25 @@ class AnnotationBuilderServiceTest extends \PHPUnit_Framework_TestCase
         $this->createBuilder()->buildAnnotations('SomeClassFQDN');
     }
 
-	/**
-	 * Testing:
-	 * testGetAuthorize()
-	 *
-	 * Main method's logic should found that wrong param was given and return null
-	 */
-	public function testGetAuthorizeInvalidParam()
-	{
-		$service = $this->createBuilder();
+    /**
+     * Testing:
+     * testGetAuthorize()
+     *
+     * Main method's logic should found that wrong param was given and return null
+     */
+    public function testGetAuthorizeInvalidParam()
+    {
+        $service = $this->createBuilder();
 
-		$annotationCollection = new AnnotationCollection;
-		$annotationCollection->append('nonAuthorize');
+        $annotationCollection = new AnnotationCollection;
+        $annotationCollection->append('nonAuthorize');
 
-		$class  = new \ReflectionClass('MintSoft\\Authorize\\Annotation\\AnnotationBuilder');
-		$method = $class->getMethod('getAuthorize');
-		$method->setAccessible(true);
+        $class  = new \ReflectionClass('MintSoft\\Authorize\\Annotation\\AnnotationBuilder');
+        $method = $class->getMethod('getAuthorize');
+        $method->setAccessible(true);
 
-		$result = $method->invoke($service, $annotationCollection);
+        $result = $method->invoke($service, $annotationCollection);
 
-		$this->assertNull($result);
-	}
+        $this->assertNull($result);
+    }
 }

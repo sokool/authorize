@@ -8,13 +8,18 @@
 
 namespace MintSoft\Authorize\Annotation;
 
-use Zend\Form\Annotation\AbstractArrayOrStringAnnotation;
-
 /**
  * @Annotation
  */
-final class Role extends AbstractArrayOrStringAnnotation
+final class Role
 {
+    private $value = [];
+
+    public function __construct($value)
+    {
+        $this->value = $value['value'];
+    }
+
     public function getName()
     {
         return is_array($this->value) ? $this->value[0] : $this->value;

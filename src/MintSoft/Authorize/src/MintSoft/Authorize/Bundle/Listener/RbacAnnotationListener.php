@@ -31,6 +31,6 @@ class RbacAnnotationListener
         $hasAccess  = $classGuard->isAllowed($className, $methodName, $user);
         $has        = $hasAccess ? ' has Access to ' : ' has DENY ACESS to';
 
-        \Tracy\Debugger::barDump('User ' . $user->getUsername() . $has . $className . '::' . $methodName);
+        echo ('User ' . $user->getUsername() . $has . $className . '::' . $methodName);
     }
 }

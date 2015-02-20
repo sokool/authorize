@@ -20,6 +20,8 @@ class ClassGuard
 
     protected $provider;
 
+    protected $containers;
+
     /**
      * @param AnnotationBuilder $builder
      * @param RoleProvidable    $roleProvider
@@ -107,15 +109,30 @@ class ClassGuard
     /**
      * @param $identity
      *
-     * @return Rbac
+     * @return mixed
+     * @throws \Exception
      */
     private function getContainer($identity)
     {
-        if ($this->provider->refresh()) {
-            $this->roles = $this->provider->allRoles($identity);
+        $hash = null;
+        if (is_string($identity)) {
+            $hash = $identity;
         }
 
-        return $this->roles;
+        if (is_object($identity)) {
+            $hash = spl_object_hash($identity);
+        }
+
+        if (!empty($this->containers[$hash])) {
+            return $this->containers[$hash];
+        }
+
+        if (is_null($hash)) {
+            throw new \Exception('Type is not supported');
+        }
+        $this->containers[$hash] = $this->provider->allRoles($identity);
+
+        return $this->containers[$hash];
     }
 
     /**
@@ -128,11 +145,12 @@ class ClassGuard
     public function isAllowed($className, $methodName = null, $identity = null)
     {
         $classAnnotations = $this->builder->addClass($className)->build()[$className];
+
         //Check on ClassName Level
         $allowed = $this->checkBlock($classAnnotations, $identity);
         if ($allowed) {
             //Check on ClassMethodName Level
-            if ($methodName) {
+            if ($methodName && ($methodAnnotationSet = $classAnnotations->getSet($methodName))) {
                 return $this->checkBlock($classAnnotations->getSet($methodName), $identity);
             }
         }

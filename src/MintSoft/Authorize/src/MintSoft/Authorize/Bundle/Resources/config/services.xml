@@ -10,9 +10,13 @@
         <parameter key="rbac.annotation.listener.class">MintSoft\Authorize\Bundle\Listener\RbacAnnotationListener</parameter>
         <parameter key="rbac.annotation.reader.class">MintSoft\Authorize\Bundle\AnnotationReader</parameter>
         <parameter key="rbac.annotation.builder.class">MintSoft\Authorize\Annotation\Builder</parameter>
+        <parameter key="rbac.notallowed.listener.class">MintSoft\Authorize\Bundle\Listener\NotAllowedListener</parameter>
     </parameters>
 
     <services>
+        <service id="rbac.notallowed.listener" class="%rbac.notallowed.listener.class%">
+            <tag name="kernel.event_listener" event="kernel.exception" method="onKernelException"/>
+        </service>
         <service id="rbac.annotation.listener" class="%rbac.annotation.listener.class%">
             <tag name="kernel.event_listener" event="kernel.controller" method="onKernelController"/>
         </service>

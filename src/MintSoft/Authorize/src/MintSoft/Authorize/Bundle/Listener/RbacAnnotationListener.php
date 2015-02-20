@@ -8,6 +8,8 @@
 
 namespace MintSoft\Authorize\Bundle\Listener;
 
+use MintSoft\Authorize\Exception\NotAllowedException;
+use Symfony\Component\BrowserKit\Response;
 use Symfony\Component\HttpKernel\Event\FilterControllerEvent;
 
 class RbacAnnotationListener
@@ -28,9 +30,9 @@ class RbacAnnotationListener
 
         /** @var \MintSoft\Authorize\ClassGuard $classGuard */
         $classGuard = $controller[0]->get('rbac.controller.guard');
-        $hasAccess  = $classGuard->isAllowed($className, $methodName, $user);
-        $has        = $hasAccess ? ' has Access to ' : ' has DENY ACESS to';
 
-        echo ('User ' . $user->getUsername() . $has . $className . '::' . $methodName);
+        if (!$classGuard->isAllowed($className, $methodName, $user)) {
+            throw new NotAllowedException('User ' . $user->getUsername() . ' has no access to: ' . $className . '::' . $methodName);
+        }
     }
 }

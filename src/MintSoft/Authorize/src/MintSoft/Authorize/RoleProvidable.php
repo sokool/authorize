@@ -13,13 +13,6 @@ use Zend\Permissions\Rbac\Rbac;
 interface RoleProvidable
 {
     /**
-     * Determine
-     *
-     * @return boolean
-     */
-    public function refresh();
-
-    /**
      * @param $identity
      *
      * @return Rbac

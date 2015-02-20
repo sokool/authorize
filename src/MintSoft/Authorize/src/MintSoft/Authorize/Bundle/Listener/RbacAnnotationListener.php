@@ -26,13 +26,13 @@ class RbacAnnotationListener
 
         $className  = get_class($controller[0]);
         $methodName = $controller[1];
-        $user       = $controller[0]->get('security.token_storage')->getToken()->getUser();
+        $userName   = $controller[0]->get('security.token_storage')->getToken()->getUser()->getUserName();
 
         /** @var \MintSoft\Authorize\ClassGuard $classGuard */
         $classGuard = $controller[0]->get('rbac.controller.guard');
 
-        if (!$classGuard->isAllowed($className, $methodName, $user)) {
-            throw new NotAllowedException('User ' . $user->getUsername() . ' has no access to: ' . $className . '::' . $methodName);
+        if (!$classGuard->isAllowed($className, $methodName, $userName)) {
+            throw new NotAllowedException('User ' . $userName . ' has no access to: ' . $className . '::' . $methodName);
         }
     }
 }

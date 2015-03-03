@@ -11,6 +11,7 @@ namespace MintSoft\Authorize\Bundle\Listener;
 use MintSoft\Authorize\Exception\NotAllowedException;
 use Symfony\Component\BrowserKit\Response;
 use Symfony\Component\HttpKernel\Event\FilterControllerEvent;
+use Symfony\Component\DependencyInjection\ContainerAware;
 
 class RbacAnnotationListener
 {
@@ -21,6 +22,10 @@ class RbacAnnotationListener
     {
 
         if (!is_array($controller = $event->getController())) { //return if no controller
+            return;
+        }
+
+        if (!$controller[0] instanceof ContainerAware) {
             return;
         }
 

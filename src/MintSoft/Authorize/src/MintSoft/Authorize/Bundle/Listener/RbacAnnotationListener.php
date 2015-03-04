@@ -8,13 +8,30 @@
 
 namespace MintSoft\Authorize\Bundle\Listener;
 
+use MintSoft\Authorize\ClassGuard;
 use MintSoft\Authorize\Exception\NotAllowedException;
-use Symfony\Component\BrowserKit\Response;
+
 use Symfony\Component\HttpKernel\Event\FilterControllerEvent;
-use Symfony\Component\DependencyInjection\ContainerAware;
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorage;
 
 class RbacAnnotationListener
 {
+    /**
+     * @var ClassGuard
+     */
+    protected $classGuard;
+
+    /**
+     * @var TokenStorage
+     */
+    protected $tokenStorage;
+
+    public function __construct(ClassGuard $classGuard, TokenStorage $tokenStorage)
+    {
+        $this->classGuard   = $classGuard;
+        $this->tokenStorage = $tokenStorage;
+    }
+
     /**
      * This event will fire during any controller call
      */
@@ -25,18 +42,12 @@ class RbacAnnotationListener
             return;
         }
 
-        if (!$controller[0] instanceof ContainerAware) {
-            return;
-        }
-
+        $token      = $this->tokenStorage->getToken();
+        $userName   = $token ? $token->getUsername() : '';
         $className  = get_class($controller[0]);
         $methodName = $controller[1];
-        $userName   = $controller[0]->get('security.token_storage')->getToken()->getUser()->getUserName();
 
-        /** @var \MintSoft\Authorize\ClassGuard $classGuard */
-        $classGuard = $controller[0]->get('rbac.controller.guard');
-
-        if (!$classGuard->isAllowed($className, $methodName, $userName)) {
+        if (!$this->classGuard->isAllowed($className, $methodName, $userName)) {
             throw new NotAllowedException('User ' . $userName . ' has no access to: ' . $className . '::' . $methodName);
         }
     }

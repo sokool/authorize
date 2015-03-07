@@ -17,6 +17,7 @@ use Zend\ServiceManager\ServiceLocatorInterface;
 
 class RoleProvider implements RoleProvidable
 {
+
     /**
      * Determine
      *
